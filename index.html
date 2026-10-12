@@ -55,8 +55,15 @@
       </div>
 
       <nav class="nav-menu">
+        <div class="nav-section-label">COMMAND CENTER / ওভারভিউ</div>
+        <button class="nav-item active" data-tab="dashboard" id="navTabDashboard">
+          <span class="nav-icon">📊</span>
+          <span class="nav-label">Executive Dashboard / ড্যাশবোর্ড</span>
+          <span class="nav-badge pulse-badge" style="background:var(--accent-primary); color:#000; font-weight:800;">LIVE</span>
+        </button>
+
         <div class="nav-section-label">POS OPERATIONS</div>
-        <button class="nav-item active" data-tab="checkout">
+        <button class="nav-item" data-tab="checkout" id="navTabCheckout">
           <span class="nav-icon">🛒</span>
           <span class="nav-label">Checkout / Fast Sale</span>
         </button>
@@ -147,8 +154,312 @@
     <!-- Main Content Area -->
     <main class="main-viewport">
       
+      <!-- ================= TAB 0: EXECUTIVE COMMAND CENTER DASHBOARD ================= -->
+      <section id="tab-dashboard" class="view-panel active">
+        <div class="dashboard-container">
+
+          <!-- Dashboard Header Control Bar -->
+          <div class="dashboard-header-bar">
+            <div class="dashboard-title-group">
+              <h1>
+                <span>📊</span> Executive Command Center
+                <span style="font-size:0.95rem; font-weight:600; color:var(--accent-primary); background:rgba(255,106,0,0.12); padding:3px 10px; border-radius:20px; border:1px solid rgba(255,106,0,0.3);">ড্যাশবোর্ড ওভারভিউ</span>
+              </h1>
+              <p>Real-time Pulse of Store Operations • POS Liquidity • Double-Entry Ledger • Inventory Health • Omnichannel</p>
+            </div>
+            <div class="dashboard-header-actions">
+              <span class="dashboard-status-pill" id="dashShiftPill">
+                <span class="pulse-dot"></span>
+                <span id="dashShiftText">Live ERP Connected</span>
+              </span>
+              <button class="btn-ghost-sm" id="btnDashRefresh" onclick="loadDashboardOverview()" title="Refresh All Metrics">
+                🔄 Refresh Pulse
+              </button>
+              <button class="btn-primary" onclick="switchToTab('checkout')">
+                🛒 Open POS Checkout [F2]
+              </button>
+            </div>
+          </div>
+
+          <!-- Hero KPI Grid (8 Key Financial & Operational Metrics) -->
+          <div class="dash-kpi-grid">
+            
+            <!-- KPI 1: Today's Sales -->
+            <div class="dash-kpi-card glow-emerald">
+              <div class="dash-kpi-top">
+                <span class="dash-kpi-label">TODAY'S GROSS SALES (বিক্রি)</span>
+                <div class="dash-kpi-icon-wrap" style="color:#10b981;">💰</div>
+              </div>
+              <div class="dash-kpi-val" id="dashKpiSalesToday">$0.00</div>
+              <div class="dash-kpi-sub">
+                <span style="color:#10b981; font-weight:700;">▲ Live</span>
+                <span id="dashKpiSalesOrders">0 orders completed</span>
+              </div>
+            </div>
+
+            <!-- KPI 2: Gross Profit & Margin -->
+            <div class="dash-kpi-card glow-orange">
+              <div class="dash-kpi-top">
+                <span class="dash-kpi-label">ESTIMATED PROFIT (মুনাফা)</span>
+                <div class="dash-kpi-icon-wrap" style="color:var(--accent-primary);">📈</div>
+              </div>
+              <div class="dash-kpi-val" id="dashKpiProfit" style="color:var(--accent-primary);">$0.00</div>
+              <div class="dash-kpi-sub">
+                <span id="dashKpiMarginPct" style="font-weight:700; color:var(--accent-primary);">0% Margin</span>
+                <span>• based on COGS formula</span>
+              </div>
+            </div>
+
+            <!-- KPI 3: Total Inventory Valuation -->
+            <div class="dash-kpi-card glow-sky">
+              <div class="dash-kpi-top">
+                <span class="dash-kpi-label">INVENTORY VALUATION (মজুদ)</span>
+                <div class="dash-kpi-icon-wrap" style="color:#38bdf8;">📦</div>
+              </div>
+              <div class="dash-kpi-val" id="dashKpiInvVal">$0.00</div>
+              <div class="dash-kpi-sub" id="dashKpiInvSub">
+                <span>Retail: $0.00</span>
+                <span>• 0 SKU products</span>
+              </div>
+            </div>
+
+            <!-- KPI 4: Liquid Cash & Drawer -->
+            <div class="dash-kpi-card glow-amber">
+              <div class="dash-kpi-top">
+                <span class="dash-kpi-label">DRAWER &amp; LIQUID CASH (ক্যাশ)</span>
+                <div class="dash-kpi-icon-wrap" style="color:#f59e0b;">💵</div>
+              </div>
+              <div class="dash-kpi-val" id="dashKpiLiquidity">$0.00</div>
+              <div class="dash-kpi-sub" id="dashKpiLiquiditySub">
+                <span>Drawer + Bank Funds</span>
+              </div>
+            </div>
+
+            <!-- KPI 5: Low Stock Radar -->
+            <div class="dash-kpi-card glow-rose">
+              <div class="dash-kpi-top">
+                <span class="dash-kpi-label">LOW STOCK ALERTS (কম স্টক)</span>
+                <div class="dash-kpi-icon-wrap" style="color:#f43f5e;">⚠️</div>
+              </div>
+              <div class="dash-kpi-val" id="dashKpiLowStock" style="color:#f43f5e;">0 SKUs</div>
+              <div class="dash-kpi-sub">
+                <span style="color:#f43f5e; font-weight:700;">Urgent</span>
+                <span>Runway &lt; Safety Stock</span>
+              </div>
+            </div>
+
+            <!-- KPI 6: Open Purchase Orders -->
+            <div class="dash-kpi-card glow-purple">
+              <div class="dash-kpi-top">
+                <span class="dash-kpi-label">OPEN PURCHASE ORDERS (ক্রয়াদেশ)</span>
+                <div class="dash-kpi-icon-wrap" style="color:#a855f7;">📥</div>
+              </div>
+              <div class="dash-kpi-val" id="dashKpiOpenPos">0 POs</div>
+              <div class="dash-kpi-sub" id="dashKpiOpenPosSub">
+                <span>Awaiting Goods Receipt (GRN)</span>
+              </div>
+            </div>
+
+            <!-- KPI 7: Double-Entry Trial Balance -->
+            <div class="dash-kpi-card glow-emerald">
+              <div class="dash-kpi-top">
+                <span class="dash-kpi-label">DOUBLE-ENTRY LEDGER (হিসাব)</span>
+                <div class="dash-kpi-icon-wrap" style="color:#10b981;">⚖️</div>
+              </div>
+              <div class="dash-kpi-val" id="dashKpiLedger" style="font-size:1.45rem; color:#10b981;">BALANCED ✓</div>
+              <div class="dash-kpi-sub" id="dashKpiLedgerSub">
+                <span>Debit = Credit (Variance: $0.00)</span>
+              </div>
+            </div>
+
+            <!-- KPI 8: Active Repair Workbench -->
+            <div class="dash-kpi-card glow-orange">
+              <div class="dash-kpi-top">
+                <span class="dash-kpi-label">DEVICE REPAIRS (সার্ভিসিং)</span>
+                <div class="dash-kpi-icon-wrap" style="color:var(--accent-primary);">🔧</div>
+              </div>
+              <div class="dash-kpi-val" id="dashKpiRepairs">0 Active</div>
+              <div class="dash-kpi-sub" id="dashKpiRepairsSub">
+                <span>Tickets on workbench</span>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Quick Action Launchpad -->
+          <div class="quick-launchpad-section">
+            <div class="quick-launchpad-title">
+              <span>⚡</span> EXECUTIVE QUICK LAUNCHPAD (সরাসরি দ্রুত অ্যাক্সেস শর্টকাট)
+            </div>
+            <div class="quick-launchpad-grid">
+              <button class="btn-launch-tile" onclick="switchToTab('checkout')">
+                <span class="tile-icon">🛒</span>
+                <div>
+                  <div>New Sale [F2]</div>
+                  <small style="color:var(--text-muted); font-size:0.72rem;">POS Counter</small>
+                </div>
+              </button>
+              <button class="btn-launch-tile" onclick="switchToTab('barcodes')">
+                <span class="tile-icon">🏷️</span>
+                <div>
+                  <div>Barcode Studio</div>
+                  <small style="color:var(--text-muted); font-size:0.72rem;">Print Labels</small>
+                </div>
+              </button>
+              <button class="btn-launch-tile" onclick="switchToTab('inventory')">
+                <span class="tile-icon">📦</span>
+                <div>
+                  <div>Inventory Stock</div>
+                  <small style="color:var(--text-muted); font-size:0.72rem;">Shelves &amp; Placement</small>
+                </div>
+              </button>
+              <button class="btn-launch-tile" onclick="switchToTab('procurement'); setTimeout(() => { if (typeof openCreatePoModal === 'function') openCreatePoModal(); }, 150);">
+                <span class="tile-icon">📥</span>
+                <div>
+                  <div>New Supplier PO</div>
+                  <small style="color:var(--text-muted); font-size:0.72rem;">Procurement Order</small>
+                </div>
+              </button>
+              <button class="btn-launch-tile" onclick="switchToTab('accounting')">
+                <span class="tile-icon">📑</span>
+                <div>
+                  <div>General Ledger</div>
+                  <small style="color:var(--text-muted); font-size:0.72rem;">Double-Entry JV</small>
+                </div>
+              </button>
+              <button class="btn-launch-tile" onclick="switchToTab('audit_stock')">
+                <span class="tile-icon">🔍</span>
+                <div>
+                  <div>Stock Audit</div>
+                  <small style="color:var(--text-muted); font-size:0.72rem;">Shrinkage Run</small>
+                </div>
+              </button>
+              <button class="btn-launch-tile" onclick="switchToTab('combos')">
+                <span class="tile-icon">🎁</span>
+                <div>
+                  <div>Combos &amp; Bundles</div>
+                  <small style="color:var(--text-muted); font-size:0.72rem;">Kit Promotions</small>
+                </div>
+              </button>
+              <button class="btn-launch-tile" onclick="switchToTab('omnichannel')">
+                <span class="tile-icon">🌐</span>
+                <div>
+                  <div>Omnichannel Orders</div>
+                  <small style="color:var(--text-muted); font-size:0.72rem;">Web &amp; Marketplace</small>
+                </div>
+              </button>
+              <button class="btn-launch-tile" onclick="switchToTab('repairs')">
+                <span class="tile-icon">🔧</span>
+                <div>
+                  <div>Repairs Workbench</div>
+                  <small style="color:var(--text-muted); font-size:0.72rem;">Fix &amp; Warranty</small>
+                </div>
+              </button>
+              <button class="btn-launch-tile" onclick="switchToTab('reports')">
+                <span class="tile-icon">📊</span>
+                <div>
+                  <div>ERP Analytics &amp; P&amp;L</div>
+                  <small style="color:var(--text-muted); font-size:0.72rem;">12M Profit &amp; Loss</small>
+                </div>
+              </button>
+            </div>
+          </div>
+
+          <!-- Split Operational View: Live Sales vs Risk Radar -->
+          <div class="dash-split-grid">
+            
+            <!-- Left: Live Recent Transactions Stream -->
+            <div class="dash-panel-card">
+              <div class="dash-panel-header">
+                <div class="dash-panel-title">
+                  <span>🧾</span> Recent Sales &amp; Counter Stream (সাম্প্রতিক লেনদেন)
+                </div>
+                <button class="btn-ghost-sm" onclick="switchToTab('history')">View Full History →</button>
+              </div>
+              
+              <div class="table-container max-h-350">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>Receipt #</th>
+                      <th>Time</th>
+                      <th>Customer</th>
+                      <th>Items Sold</th>
+                      <th>Method</th>
+                      <th style="text-align:right;">Amount</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody id="dashRecentSalesBody">
+                    <tr><td colspan="7" style="text-align:center; color:var(--text-muted); padding:24px;">Loading live stream...</td></tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <!-- Payment Method Mix Bar -->
+              <div class="payment-mix-meter-wrap">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                  <span style="font-size:0.76rem; font-weight:700; text-transform:uppercase; color:var(--text-muted);">TENDER DISTRIBUTION / পেমেন্ট মাধ্যম অনুপাত</span>
+                  <span id="dashTenderTotalText" style="font-size:0.8rem; font-weight:700; color:var(--text-primary);">$0.00 Total</span>
+                </div>
+                <div class="payment-mix-bar" id="dashPaymentMixBar">
+                  <div class="payment-mix-segment" style="width:50%; background:#10b981;" title="Cash: 50%"></div>
+                  <div class="payment-mix-segment" style="width:30%; background:#38bdf8;" title="Card: 30%"></div>
+                  <div class="payment-mix-segment" style="width:20%; background:#a855f7;" title="MFS: 20%"></div>
+                </div>
+                <div class="payment-mix-legend" id="dashPaymentLegend">
+                  <div><span class="legend-dot" style="background:#10b981;"></span>Cash: <strong id="dashPctCash">0%</strong></div>
+                  <div><span class="legend-dot" style="background:#38bdf8;"></span>Card: <strong id="dashPctCard">0%</strong></div>
+                  <div><span class="legend-dot" style="background:#a855f7;"></span>MFS / Bank: <strong id="dashPctMfs">0%</strong></div>
+                  <div><span class="legend-dot" style="background:#f59e0b;"></span>Split / Other: <strong id="dashPctSplit">0%</strong></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right: Operational Radar & Real-Time Alerts -->
+            <div class="dash-panel-card">
+              <div class="dash-panel-header">
+                <div class="dash-panel-title">
+                  <span>🚨</span> Operational Radar &amp; Health (সতর্কতা ও অ্যালার্ট)
+                </div>
+                <span class="status-badge ready">Watchdog Active</span>
+              </div>
+
+              <div class="radar-list">
+                <!-- Critical Low Stock Alerts -->
+                <div style="font-size:0.76rem; font-weight:700; text-transform:uppercase; color:var(--text-muted); margin-bottom:-4px;">CRITICAL STOCK REORDER RADAR</div>
+                <div id="dashRadarLowStockItems" style="display:flex; flex-direction:column; gap:8px;">
+                  <!-- Dynamic items -->
+                </div>
+
+                <!-- Omnichannel Queue -->
+                <div style="font-size:0.76rem; font-weight:700; text-transform:uppercase; color:var(--text-muted); margin-top:8px; margin-bottom:-4px;">OMNICHANNEL ORDERS QUEUE</div>
+                <div id="dashRadarOmniQueue" style="display:flex; flex-direction:column; gap:8px;">
+                  <!-- Dynamic items -->
+                </div>
+
+                <!-- System Audit Integrity Check -->
+                <div class="radar-item" style="border-left: 3px solid #10b981;">
+                  <div class="radar-item-left">
+                    <span class="radar-item-icon">⚖️</span>
+                    <div>
+                      <div class="radar-item-title">Double-Entry Ledger Integrity</div>
+                      <div class="radar-item-sub" id="dashAuditStatusMsg">Zero variance between Total Debits &amp; Credits</div>
+                    </div>
+                  </div>
+                  <button class="btn-table-action" onclick="switchToTab('accounting')">Audit</button>
+                </div>
+
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </section>
+
       <!-- ================= TAB 1: CHECKOUT ================= -->
-      <section id="tab-checkout" class="view-panel active">
+      <section id="tab-checkout" class="view-panel">
         <div class="pos-workspace">
           
           <!-- Catalog & Custom Item -->
@@ -1427,7 +1738,11 @@
 
   <!-- Mobile Bottom Navigation Bar -->
   <nav class="mobile-bottom-nav">
-    <button class="mobile-nav-btn active" data-tab="checkout">
+    <button class="mobile-nav-btn active" data-tab="dashboard">
+      <span>📊</span>
+      <small>Dashboard</small>
+    </button>
+    <button class="mobile-nav-btn" data-tab="checkout">
       <span>🛒</span>
       <small>Checkout</small>
     </button>
