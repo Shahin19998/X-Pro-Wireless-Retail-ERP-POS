@@ -1,11 +1,12 @@
 // XPRO STORE POS Offline Service Worker
-const CACHE_NAME = 'xpro-pos-v1';
+const CACHE_NAME = 'xpro-pos-v2';
 const ASSETS = [
-  '/',
-  '/index.html',
-  '/styles.css',
-  '/app.js',
-  '/manifest.json'
+  './',
+  './index.html',
+  './styles.css',
+  './app.js',
+  './manifest.json',
+  './logo.png'
 ];
 
 self.addEventListener('install', (event) => {

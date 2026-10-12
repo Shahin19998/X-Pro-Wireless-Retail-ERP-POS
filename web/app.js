@@ -126,23 +126,437 @@ function closeModal(id) {
   if (el) el.classList.remove('active');
 }
 
-// API Helper
-async function api(path, options = {}) {
-  try {
-    const res = await fetch(path, {
-      headers: { 'Content-Type': 'application/json' },
-      ...options
-    });
-    const data = await res.json();
-    if (!res.ok) {
-      throw new Error(data.error || 'Request failed');
-    }
-    return data;
-  } catch (err) {
-    showToast(err.message, 'error');
-    throw err;
+// ================= HYBRID API & OFFLINE DEMO ENGINE =================
+const IS_STATIC_HOST = window.location.hostname.includes('github.io') || window.location.protocol === 'file:';
+
+const DEMO_STORE_KEY = 'xpro_retail_demo_store_v2';
+
+function getDemoStore() {
+  const saved = localStorage.getItem(DEMO_STORE_KEY);
+  if (saved) {
+    try { return JSON.parse(saved); } catch(e) {}
   }
+
+  const initial = {
+    inventory: [
+      { id: 1, name: 'iPhone 15 Pro Silicone Case with MagSafe', category: 'Merchandise', price_cents: 3999, cost_cents: 1599, quantity: 42, barcode: 'XP891001', sku: 'ACC-IPH15-01', shelf_location: 'Rack A-1 (Cases)' },
+      { id: 2, name: '9H Tempered Glass Screen Protector (iPhone 15)', category: 'Merchandise', price_cents: 1499, cost_cents: 350, quantity: 85, barcode: 'XP891002', sku: 'ACC-GLS-02', shelf_location: 'Display Stand B' },
+      { id: 3, name: 'Anker 30W USB-C Nano Fast Wall Charger', category: 'Merchandise', price_cents: 2499, cost_cents: 1100, quantity: 28, barcode: 'XP891003', sku: 'ACC-ANK-03', shelf_location: 'Shelf C-2' },
+      { id: 4, name: 'Braided 6ft USB-C to USB-C Fast Cable (60W)', category: 'Merchandise', price_cents: 1299, cost_cents: 420, quantity: 64, barcode: 'XP891004', sku: 'ACC-CBL-04', shelf_location: 'Display Stand B' },
+      { id: 5, name: 'Samsung Galaxy S24 Ultra Clear Armor Guard', category: 'Merchandise', price_cents: 2999, cost_cents: 950, quantity: 18, barcode: 'XP891005', sku: 'ACC-S24-05', shelf_location: 'Rack A-2 (Android)' },
+      { id: 6, name: 'iPhone 14 OEM OLED Screen Replacement Assembly', category: 'Repair', price_cents: 11999, cost_cents: 5800, quantity: 6, barcode: 'XP892001', sku: 'REP-IPH14-LCD', shelf_location: 'Tech Bench D-1' },
+      { id: 7, name: 'Fast Wireless Magnetic Charging Pad 15W', category: 'Merchandise', price_cents: 3499, cost_cents: 1450, quantity: 22, barcode: 'XP891006', sku: 'ACC-WCH-06', shelf_location: 'Front Display' },
+      { id: 8, name: 'MagSafe Ultra Magnetic Ring Grip / Kickstand', category: 'Merchandise', price_cents: 1899, cost_cents: 600, quantity: 35, barcode: 'XP891007', sku: 'ACC-GRP-07', shelf_location: 'Front Display' }
+    ],
+    sales: [
+      { id: 1, receipt_number: 'XP-000001', customer_name: 'Walk-in Customer', total_cents: 3999, created_at: '2026-10-12 10:30 AM', category: 'Merchandise', description: 'iPhone 15 Pro Silicone Case', payment_method: 'Cash', status: 'COMPLETED' },
+      { id: 2, receipt_number: 'XP-000002', customer_name: 'Karim Ullah', total_cents: 14498, created_at: '2026-10-12 11:15 AM', category: 'Repair', description: 'iPhone 14 OLED Screen + Case', payment_method: 'Card', status: 'COMPLETED' }
+    ],
+    customers: [
+      { id: 1, name: 'Rahim Chowdhury', phone: '(555) 234-5678', email: 'rahim@example.com', total_spend_cents: 18500, order_count: 4, notes: 'VIP Customer; uses iPhone 15' },
+      { id: 2, name: 'Karim Ullah', phone: '(555) 987-6543', email: 'karim@example.com', total_spend_cents: 14498, order_count: 1, notes: 'Screen replacement repair' },
+      { id: 3, name: 'Farhana Yasmin', phone: '(555) 345-6789', email: 'farhana@example.com', total_spend_cents: 6998, order_count: 2, notes: 'Purchases Anker chargers' }
+    ],
+    repairs: [
+      { id: 1, ticket_number: 'REP-1001', customer_name: 'Farhana Yasmin', customer_phone: '(555) 345-6789', device_model: 'iPhone 13 Pro Gold', reported_issue: 'Cracked back glass', status: 'IN PROGRESS', created_at: '2026-10-11' },
+      { id: 2, ticket_number: 'REP-1002', customer_name: 'Tanvir Hossain', customer_phone: '(555) 456-7890', device_model: 'Samsung S22 Ultra', reported_issue: 'Battery replacement', status: 'READY', created_at: '2026-10-10' }
+    ],
+    suppliers: [
+      { id: 1, name: 'Apex Global Accessories Ltd.', code: 'SUP-APEX', contact_person: 'Robert Vance', phone: '(555) 789-0123', email: 'orders@apexparts.com', payment_terms: 'NET_30', outstanding_balance_cents: 284000 },
+      { id: 2, name: 'Shenzhen Prime Tech Parts', code: 'SUP-PRIME', contact_person: 'David Chen', phone: '+86 755 8821 0000', email: 'supply@primetech.cn', payment_terms: 'NET_15', outstanding_balance_cents: 152000 }
+    ],
+    purchase_orders: [
+      { id: 1, po_number: 'PO-20261012-1ED6', supplier_name: 'Apex Global Accessories Ltd.', total_cost_cents: 350000, status: 'APPROVED', order_date: '2026-10-12', expected_date: '2026-10-15', items: [{ product_id: 1, quantity: 50, unit_cost_cents: 1599 }] },
+      { id: 2, po_number: 'PO-20261010-88A2', supplier_name: 'Shenzhen Prime Tech Parts', total_cost_cents: 580000, status: 'RECEIVED', order_date: '2026-10-10', expected_date: '2026-10-12', items: [{ product_id: 6, quantity: 10, unit_cost_cents: 5800 }] }
+    ],
+    combos: [
+      { id: 1, name: 'iPhone 15 Pro Guard Bundle (Case + 9H Glass)', barcode: 'CMB98101', selling_price_cents: 4999, total_cogs_cents: 1949, available_bundles: 42, items_json: JSON.stringify([{ product_id: 1, name: 'Silicone Case', quantity: 1 }, { product_id: 2, name: '9H Glass', quantity: 1 }]) }
+    ],
+    audits: [
+      { id: 1, audit_number: 'AUD-20261012-001', product_name: 'iPhone 15 Pro Silicone Case', system_stock: 44, physical_count: 42, discrepancy: -2, discrepancy_cost_cents: 3198, reason: 'Theft / Pilferage (Shrinkage)', journal_entry_id: 9, status: 'RECONCILED', created_at: '2026-10-12 11:00 AM' }
+    ],
+    omnichannel: [
+      { id: 1, order_number: 'OMNI-WEB-4901', channel: 'Web Store', customer_name: 'Farhan Ahmed', product_name: 'iPhone 15 Pro Silicone Case', quantity: 1, total_cents: 3999, status: 'RESERVED' },
+      { id: 2, order_number: 'OMNI-WHATS-4902', channel: 'WhatsApp', customer_name: 'Nadia Sultana', product_name: 'Anker 30W Wall Charger', quantity: 2, total_cents: 4998, status: 'DISPATCHED' }
+    ],
+    coupons: [
+      { code: 'WELCOME10', discount_type: 'PERCENT', discount_value: 10, is_active: 1 },
+      { code: 'SAVE5', discount_type: 'FIXED', discount_value: 500, is_active: 1 },
+      { code: 'VIP20', discount_type: 'PERCENT', discount_value: 20, is_active: 1 }
+    ]
+  };
+
+  localStorage.setItem(DEMO_STORE_KEY, JSON.stringify(initial));
+  return initial;
 }
+
+function saveDemoStore(store) {
+  localStorage.setItem(DEMO_STORE_KEY, JSON.stringify(store));
+}
+
+function handleLocalMockApi(path, options = {}) {
+  const store = getDemoStore();
+  const method = (options.method || 'GET').toUpperCase();
+  const body = options.body ? JSON.parse(options.body) : {};
+
+  // Status
+  if (path === '/api/status') {
+    return Promise.resolve({
+      store_name: 'X Pro Wireless & Repair',
+      version: '1.0 Enterprise (Live Demo)',
+      policy_version: '2026.1',
+      initialized: true,
+      active_shift: { id: 1, opening_float_cents: 5000, cashier: STATE.user ? STATE.user.username : 'Admin' },
+      inventory_items: store.inventory.length,
+      pending_repairs: store.repairs.filter(r => r.status !== 'DELIVERED').length
+    });
+  }
+
+  // Inventory
+  if (path === '/api/inventory') {
+    if (method === 'POST') {
+      const newId = store.inventory.length + 1;
+      const item = { id: newId, ...body, barcode: body.barcode || `XP89${Math.floor(100000 + Math.random()*900000)}` };
+      store.inventory.push(item);
+      saveDemoStore(store);
+      return Promise.resolve(item);
+    }
+    return Promise.resolve(store.inventory);
+  }
+
+  // Sales History
+  if (path === '/api/sales') return Promise.resolve(store.sales);
+
+  // Customers
+  if (path === '/api/customers') {
+    if (method === 'POST') {
+      const newCust = { id: store.customers.length + 1, ...body, total_spend_cents: 0, order_count: 0 };
+      store.customers.push(newCust);
+      saveDemoStore(store);
+      return Promise.resolve(newCust);
+    }
+    return Promise.resolve(store.customers);
+  }
+
+  // Repairs
+  if (path === '/api/repairs') {
+    if (method === 'POST') {
+      const newRep = { id: store.repairs.length + 1, ticket_number: `REP-${1000 + store.repairs.length + 1}`, ...body, status: 'IN PROGRESS', created_at: new Date().toISOString().slice(0, 10) };
+      store.repairs.push(newRep);
+      saveDemoStore(store);
+      return Promise.resolve(newRep);
+    }
+    return Promise.resolve(store.repairs);
+  }
+
+  // Split Checkout
+  if (path === '/api/pos/split-checkout' && method === 'POST') {
+    const saleId = `XP-${String(store.sales.length + 1).padStart(6, '0')}`;
+    const totalCents = (body.payments || []).reduce((s, p) => s + (p.amount_cents || 0), 0);
+
+    // Deduct stock
+    (body.items || []).forEach(ci => {
+      const inv = store.inventory.find(i => i.id == ci.id || i.name == ci.name);
+      if (inv) inv.quantity = Math.max(0, inv.quantity - (ci.quantity || 1));
+    });
+
+    const newSale = {
+      id: store.sales.length + 1,
+      receipt_number: saleId,
+      customer_name: body.customer_name || 'Walk-in Customer',
+      total_cents: totalCents,
+      created_at: new Date().toLocaleTimeString(),
+      category: 'Merchandise',
+      description: (body.items || []).map(i => `${i.quantity}x ${i.name}`).join(', '),
+      payment_method: (body.payments || []).map(p => p.method).join(' / '),
+      status: 'COMPLETED'
+    };
+    store.sales.unshift(newSale);
+    saveDemoStore(store);
+
+    return Promise.resolve({
+      success: true,
+      sale_id: saleId,
+      journal_entry_id: 10 + store.sales.length,
+      change_due_cents: 0
+    });
+  }
+
+  // Double-Entry Accounting: Trial Balance
+  if (path === '/api/accounting/trial-balance') {
+    return Promise.resolve({
+      is_balanced: true,
+      total_debit_cents: 1485000,
+      total_credit_cents: 1485000,
+      accounts: [
+        { code: '1010', name: 'Register Petty Cash', type: 'ASSET', debit_cents: 125000, credit_cents: 0 },
+        { code: '1020', name: 'Chase Bank Operating', type: 'ASSET', debit_cents: 485000, credit_cents: 0 },
+        { code: '1030', name: 'MFS Wallet (bKash/Nagad)', type: 'ASSET', debit_cents: 95000, credit_cents: 0 },
+        { code: '1100', name: 'Accounts Receivable', type: 'ASSET', debit_cents: 45000, credit_cents: 0 },
+        { code: '1200', name: 'Inventory Asset Valuation', type: 'ASSET', debit_cents: 735000, credit_cents: 0 },
+        { code: '2010', name: 'Accounts Payable (Suppliers)', type: 'LIABILITY', debit_cents: 0, credit_cents: 436000 },
+        { code: '2020', name: 'Sales Tax / VAT Payable', type: 'LIABILITY', debit_cents: 0, credit_cents: 34000 },
+        { code: '3010', name: 'Owner Equity & Capital', type: 'EQUITY', debit_cents: 0, credit_cents: 650000 },
+        { code: '4010', name: 'Retail Merchandise Sales', type: 'REVENUE', debit_cents: 0, credit_cents: 365000 },
+        { code: '5010', name: 'Cost of Goods Sold (COGS)', type: 'COGS', debit_cents: 165000, credit_cents: 0 },
+        { code: '5020', name: 'Shrinkage & Theft Loss', type: 'COGS', debit_cents: 3198, credit_cents: 0 },
+        { code: '6010', name: 'Store Lease & Rent', type: 'EXPENSE', debit_cents: 50000, credit_cents: 0 }
+      ]
+    });
+  }
+
+  // Accounting: P&L
+  if (path === '/api/accounting/profit-loss') {
+    return Promise.resolve({
+      gross_revenue_cents: 365000,
+      cogs_cents: 168198,
+      gross_profit_cents: 196802,
+      operating_expenses_cents: 50000,
+      net_profit_cents: 146802,
+      margin_pct: '40.2'
+    });
+  }
+
+  // Accounting: GL
+  if (path === '/api/accounting/general-ledger') {
+    return Promise.resolve([
+      { created_at: '2026-10-12 11:30', entry_number: 'JV-0012', account_code: '1010', account_name: 'Petty Cash', description: 'POS Sale Split Tender XP-000001', debit_cents: 3999, credit_cents: 0 },
+      { created_at: '2026-10-12 11:30', entry_number: 'JV-0012', account_code: '4010', account_name: 'Retail Sales', description: 'POS Sale Split Tender XP-000001', debit_cents: 0, credit_cents: 3999 },
+      { created_at: '2026-10-12 10:15', entry_number: 'JV-0011', account_code: '1200', account_name: 'Inventory Asset', description: 'Goods Receipt GRN-20261010-88A2', debit_cents: 580000, credit_cents: 0 },
+      { created_at: '2026-10-12 10:15', entry_number: 'JV-0011', account_code: '2010', account_name: 'Accounts Payable', description: 'Goods Receipt GRN-20261010-88A2', debit_cents: 0, credit_cents: 580000 }
+    ]);
+  }
+
+  // Accounting: Journal
+  if (path === '/api/accounting/journal') {
+    return Promise.resolve([
+      {
+        entry_number: 'JV-0012',
+        created_at: '2026-10-12 11:30',
+        reference_type: 'POS_SALE',
+        reference_id: 'XP-000001',
+        description: 'POS Sale Split Tender XP-000001',
+        lines: [
+          { account_code: '1010', account_name: 'Petty Cash', debit_cents: 3999, credit_cents: 0 },
+          { account_code: '4010', account_name: 'Retail Sales Revenue', debit_cents: 0, credit_cents: 3999 },
+          { account_code: '5010', account_name: 'Cost of Goods Sold', debit_cents: 1599, credit_cents: 0 },
+          { account_code: '1200', account_name: 'Inventory Asset', debit_cents: 0, credit_cents: 1599 }
+        ]
+      }
+    ]);
+  }
+
+  // Procurement: POs
+  if (path === '/api/procurement/po') {
+    if (method === 'POST') {
+      const poNum = `PO-${Date.now().toString(36).toUpperCase()}`;
+      const totalCost = (body.items || []).reduce((s, i) => s + ((i.unit_cost_cents || 0) * (i.quantity || 1)), 0);
+      const sup = store.suppliers.find(s => s.id == body.supplier_id) || { name: 'Apex Accessories' };
+      const newPo = {
+        id: store.purchase_orders.length + 1,
+        po_number: poNum,
+        supplier_name: sup.name,
+        total_cost_cents: totalCost,
+        status: 'DRAFT',
+        order_date: new Date().toISOString().slice(0, 10),
+        expected_date: body.expected_date || 'Prompt',
+        items: body.items || []
+      };
+      store.purchase_orders.unshift(newPo);
+      saveDemoStore(store);
+      return Promise.resolve(newPo);
+    }
+    return Promise.resolve(store.purchase_orders);
+  }
+
+  // PO Approve
+  if (path === '/api/procurement/po/approve' && method === 'POST') {
+    const po = store.purchase_orders.find(p => p.po_number === body.po_number);
+    if (po) po.status = 'APPROVED';
+    saveDemoStore(store);
+    return Promise.resolve({ success: true, status: 'APPROVED' });
+  }
+
+  // PO Receive (Atomic trigger)
+  if (path === '/api/procurement/po/receive' && method === 'POST') {
+    const po = store.purchase_orders.find(p => p.po_number === body.po_number);
+    if (po) po.status = 'RECEIVED';
+    saveDemoStore(store);
+    return Promise.resolve({
+      success: true,
+      grn_number: `GRN-${Date.now().toString(36).toUpperCase()}`,
+      inventory_updated: true,
+      ap_credited: true,
+      journal_entry_id: 14
+    });
+  }
+
+  // Suppliers
+  if (path === '/api/procurement/suppliers') {
+    if (method === 'POST') {
+      const newSup = { id: store.suppliers.length + 1, ...body, outstanding_balance_cents: 0 };
+      store.suppliers.push(newSup);
+      saveDemoStore(store);
+      return Promise.resolve(newSup);
+    }
+    return Promise.resolve(store.suppliers);
+  }
+
+  // Inventory: Coverage Runway
+  if (path === '/api/inventory/coverage-analytics') {
+    return Promise.resolve(store.inventory.map(i => {
+      const sales30d = Math.round(i.quantity * 0.45);
+      const dailyVelocity = parseFloat((sales30d / 30).toFixed(1)) || 0.1;
+      const coverageDays = Math.round(i.quantity / dailyVelocity);
+      let velocityStatus = 'NORMAL';
+      if (coverageDays < 7) velocityStatus = 'CRITICAL_REORDER';
+      else if (dailyVelocity > 1.2) velocityStatus = 'FAST_MOVING';
+      else if (coverageDays > 45) velocityStatus = 'SLOW_MOVING';
+
+      return {
+        id: i.id,
+        sku: i.sku,
+        barcode: i.barcode,
+        name: i.name,
+        shelf_location: i.shelf_location,
+        stock_quantity: i.quantity,
+        sales_last_30_days: sales30d,
+        daily_velocity: dailyVelocity,
+        coverage_days: coverageDays,
+        reorder_point: 10,
+        velocity_status: velocityStatus
+      };
+    }));
+  }
+
+  // Combos
+  if (path === '/api/inventory/combos') {
+    if (method === 'POST') {
+      const newCmb = {
+        id: store.combos.length + 1,
+        name: body.name,
+        barcode: body.barcode || `CMB${Math.floor(100000 + Math.random()*900000)}`,
+        selling_price_cents: body.price_cents,
+        total_cogs_cents: (body.items || []).reduce((s, i) => s + ((i.unit_cost_cents || 0) * (i.quantity || 1)), 0),
+        available_bundles: 25,
+        items_json: JSON.stringify(body.items || [])
+      };
+      store.combos.unshift(newCmb);
+      saveDemoStore(store);
+      return Promise.resolve(newCmb);
+    }
+    return Promise.resolve(store.combos);
+  }
+
+  // Audits
+  if (path === '/api/inventory/audits') return Promise.resolve(store.audits);
+  if (path === '/api/inventory/audits/reconcile' && method === 'POST') {
+    const item = store.inventory.find(i => i.id == body.product_id);
+    const diff = body.physical_count - (item ? item.quantity : 0);
+    if (item) item.quantity = body.physical_count;
+    const auditNum = `AUD-${Date.now().toString(36).toUpperCase()}`;
+    store.audits.unshift({
+      id: store.audits.length + 1,
+      audit_number: auditNum,
+      product_name: item ? item.name : 'Audited Item',
+      system_stock: item ? (item.quantity - diff) : 0,
+      physical_count: body.physical_count,
+      discrepancy: diff,
+      discrepancy_cost_cents: Math.abs(diff) * (item ? item.cost_cents : 0),
+      reason: body.reason,
+      journal_entry_id: 15,
+      status: 'RECONCILED',
+      created_at: new Date().toLocaleTimeString()
+    });
+    saveDemoStore(store);
+    return Promise.resolve({ success: true, audit_number: auditNum, journal_entry_id: 15 });
+  }
+
+  // Omnichannel
+  if (path === '/api/omnichannel/orders') {
+    if (method === 'POST') {
+      const prod = store.inventory.find(i => i.id == body.product_id);
+      if (prod) prod.quantity = Math.max(0, prod.quantity - (body.quantity || 1));
+      const newOrder = {
+        id: store.omnichannel.length + 1,
+        order_number: `OMNI-${Date.now().toString(36).toUpperCase()}`,
+        channel: body.channel,
+        customer_name: body.customer_name,
+        product_name: prod ? prod.name : 'Reserved Item',
+        quantity: body.quantity || 1,
+        total_cents: (prod ? prod.price_cents : 2500) * (body.quantity || 1),
+        status: 'RESERVED'
+      };
+      store.omnichannel.unshift(newOrder);
+      saveDemoStore(store);
+      return Promise.resolve(newOrder);
+    }
+    return Promise.resolve(store.omnichannel);
+  }
+  if (path === '/api/omnichannel/orders/dispatch' && method === 'POST') {
+    const o = store.omnichannel.find(ord => ord.order_number === body.order_number);
+    if (o) o.status = 'DISPATCHED';
+    saveDemoStore(store);
+    return Promise.resolve({ success: true });
+  }
+  if (path === '/api/omnichannel/orders/restock' && method === 'POST') {
+    const o = store.omnichannel.find(ord => ord.order_number === body.order_number);
+    if (o) o.status = 'CANCELLED_RESTOCKED';
+    saveDemoStore(store);
+    return Promise.resolve({ success: true });
+  }
+
+  // Coupons
+  if (path === '/api/crm/coupons') return Promise.resolve(store.coupons);
+
+  // Executive Dashboard
+  if (path === '/api/dashboard/executive') {
+    return Promise.resolve({
+      liquidity: {
+        petty_cash_cents: 125000,
+        bank_operating_cents: 485000,
+        mfs_cents: 95000,
+        inventory_valuation_cents: 735000,
+        accounts_receivable_cents: 45000,
+        accounts_payable_cents: 436000
+      },
+      trailing_12m: [
+        { month: 'Oct 2026', purchases_cents: 350000, sales_revenue_cents: 365000, expenses_cents: 50000, net_profit_cents: 146802, margin_pct: '40.2' },
+        { month: 'Sep 2026', purchases_cents: 410000, sales_revenue_cents: 398000, expenses_cents: 52000, net_profit_cents: 154000, margin_pct: '38.7' },
+        { month: 'Aug 2026', purchases_cents: 320000, sales_revenue_cents: 345000, expenses_cents: 48000, net_profit_cents: 132000, margin_pct: '38.3' },
+        { month: 'Jul 2026', purchases_cents: 290000, sales_revenue_cents: 310000, expenses_cents: 45000, net_profit_cents: 118000, margin_pct: '38.1' }
+      ]
+    });
+  }
+
+  // Default fallback
+  return Promise.resolve([]);
+}
+
+// ================= API CALLER =================
+async function api(path, options = {}) {
+  // If not static host, try live Python backend first
+  if (!IS_STATIC_HOST) {
+    try {
+      const res = await fetch(path, {
+        headers: { 'Content-Type': 'application/json' },
+        ...options
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.error || 'Request failed');
+      }
+      return data;
+    } catch (err) {
+      console.warn('Backend unavailable, using local mock store for:', path);
+      return handleLocalMockApi(path, options);
+    }
+  }
+
+  // On GitHub Pages or static host, use local mock demo engine
+  return handleLocalMockApi(path, options);
+}
+
 
 // ================= INITIALIZATION & AUTH =================
 
@@ -154,7 +568,7 @@ async function initApp() {
 
   // Register PWA Service Worker for Offline Execution
   if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/sw.js').catch(err => {
+    navigator.serviceWorker.register('sw.js').catch(err => {
       console.log('ServiceWorker registration optional:', err);
     });
   }
