@@ -108,23 +108,61 @@ This enterprise Retail ERP and Offline-First POS application is engineered to el
 
 ---
 
-# 4. MODULE 2: EXECUTIVE DASHBOARD & FINANCIAL LIQUIDITY
-### এক্সিকিউটিভ ড্যাশবোর্ড ও নগদ প্রবাহ
+# 4. MODULE 2: EXECUTIVE COMMAND CENTER DASHBOARD & FINANCIAL LIQUIDITY
+### এক্সিকিউটিভ কমান্ড সেন্টার ড্যাশবোর্ড ও রিয়েল-টাইম অপারেশনাল কন্ট্রোল
 
 #### English:
-Designed for business owners to get a live pulse of the entire business without opening spreadsheets:
-- **Liquid Working Capital**: Real-time aggregation of Drawer Cash (`1010`), Bank Accounts (`1020`), and Mobile Money (`1030`).
-- **Asset Valuation**: Live sum of sellable inventory at Weighted Average Cost (`1200`).
-- **Outstanding Claims**: Real-time Accounts Receivable (Customer dues) and Accounts Payable (Supplier unpaid invoices).
-- **12-Month Trailing Comparison**: Historical monthly view comparing Vendor Purchases (GRN), Gross Sales Revenue, Operating Expenses, Net Operating Profit, and Margin percentages.
-- **Store Performance**: Average Basket Size (units/order), Average Ticket Value ($), and Store Footfall.
+The Executive Dashboard serves as the central operational nerve center of the entire enterprise. It delivers an instantaneous high-level overview of where what is happening across the business without requiring manual report exports or spreadsheet reconciliations.
+
+##### Core Architecture & Components:
+1. **8-Hero Operational KPI Grid**:
+   - **Today's Gross Sales**: Real-time gross turnover, total completed transactions, and average basket value.
+   - **Estimated Gross Profit & Margin**: Real-time profit calculated against Weighted Average Cost (COGS) and profit margin percentage.
+   - **Total Inventory Asset Valuation**: Dual calculation showing Total Value at Cost ($) alongside Total Value at Retail ($), across all active SKUs and physical units.
+   - **Register Drawer & Liquid Cash**: Immediate aggregation of Petty Cash in Drawer (`1010`), Bank Operating Capital (`1020`), and Mobile Money / MFS Wallets (`1030`).
+   - **Critical Low Stock Alerts**: Instant alert count of items falling below safety stock runway thresholds.
+   - **Open Purchase Orders**: Live pending supplier orders awaiting inward Goods Receipt Note (GRN) inspection.
+   - **Double-Entry General Ledger Balance**: Automatic real-time verification confirming Total Debits equal Total Credits with zero variance.
+   - **Device Repair Workbench**: Live count of active repair tickets, distinguishing devices in diagnostic bench from those ready for customer pickup.
+
+2. **Executive Quick Launchpad (10-Tile Rapid Navigator)**:
+   - One-click shortcuts directly into: POS Counter `[F2]`, Barcode Label Studio, Inventory Placement, Supplier PO Creation, General Ledger JV, Stock Shrinkage Audit, Combo Bundles, Omnichannel Web Orders, Repair Workbench, and 12-Month P&L Analytics.
+
+3. **Live Sales & Counter Stream**:
+   - Real-time tabular stream of the latest completed transactions displaying Receipt #, Time, Customer Name, Items Sold, Payment Method, and Amount with 1-click **Receipt Reprint** capabilities.
+
+4. **Payment Tender Distribution Meter**:
+   - Color-coded proportional visual bar displaying real-time settlement mix: Cash (Green), Credit/Debit Card (Sky Blue), Mobile Money / Bank (Purple), and Split Payments (Amber).
+
+5. **Operational Watchdog Radar**:
+   - **Critical Stock Reorder Radar**: Displays top items nearing stock-out with instant **1-Click PO Reorder** button.
+   - **Omnichannel Queue**: Live incoming web and marketplace orders awaiting dispatch.
 
 #### বাংলা:
-মালিকের জন্য একটি পূর্ণাঙ্গ রিয়েল-টাইম কন্ট্রোল প্যানেল:
-- **লিকুইডিটি ও নগদ তহবিল**: ড্রয়ার ক্যাশ (`1010`), ব্যাংক একাউন্ট (`1020`), এবং বিকাশ/নগদ ওয়ালেট (`1030`) থেকে তাৎক্ষণিক ব্যালেন্স।
-- **ইনভেন্টরি অ্যাসেট মূল্যায়ন**: গুদামে থাকা সমস্ত পণ্যের বর্তমান মোট কেনা মূল্যের যোগফল (`1200`)।
-- **পাওনা ও দেনা (AR & AP)**: কাস্টমারদের কাছে বকেয়া পাওনা (AR) এবং সরবরাহকারীদের কাছে মোট দেনা (AP)।
-- **১২ মাসের তুলনামূলক পর্যালোচনা**: গত ১২ মাসের প্রতি মাসের মোট ক্রয়, মোট বিক্রি, খরচ, নিট লাভ এবং লাভের শতকরা হার (Margin %)।
+এক্সিকিউটিভ ড্যাশবোর্ড হলো পুরো রিটেইল এন্টারপ্রাইজের কেন্দ্রীয় কন্ট্রোল সেন্টার বা মূল স্নায়ুকেন্দ্র। কোনো এক্সেল শিট বা খাতা-কলম ছাড়াই এক পলকে প্রতিষ্ঠানের কোথায় কী ঘটছে তা সরাসরি দেখার জন্য এটি তৈরি করা হয়েছে।
+
+##### মূল ফিচার ও কম্পোনেন্টসমূহ:
+1. **৮টি হিরো অপারেশনাল কেপিআই (KPI) কার্ড**:
+   - **আজকের মোট বিক্রি (Today's Gross Sales)**: আজকের মোট বিক্রয়মূল্য ($), মোট লেনদেনের সংখ্যা এবং গড় বাস্কেট সাইজ।
+   - **মোট মুনাফা ও মার্জিন (Estimated Profit & Margin)**: বিক্রিত পণ্যের ক্রয়মূল্য (COGS) বাদ দিয়ে আজকের নিট মুনাফা এবং শতকরা লাভের মার্জিন (Margin %)।
+   - **ইনভেন্টরি মোট সম্পদ মূল্য (Inventory Valuation)**: গুদামে থাকা মোট মালের ক্রয়মূল্য (Cost Valuation) এবং সম্ভাব্য বিক্রয়মূল্য (Retail Valuation), মোট পিস এবং এসকেইউ (SKU) সংখ্যা।
+   - **রেজিস্টার ক্যাশ ও লিকুইডিটি (Drawer & Liquid Cash)**: ক্যাশ কাউন্টারে থাকা নগদ ক্যাশ (`1010`), ব্যাংকের চলতি মূলধন (`1020`), এবং বিকাশ/নগদ ওয়ালেটের মোট যোগফল।
+   - **কম স্টক সতর্কতা (Low Stock Alerts)**: যে সমস্ত পণ্যের স্টক সেফটি লিমিটের নিচে নেমে গেছে তাদের জরুরি অ্যালার্ট সংখ্যা।
+   - **বকেয়া ক্রয়াদেশ (Open Purchase Orders)**: সরবরাহকারীদের কাছে পাঠানো কতটি পিও (PO) এখনও মাল আসার অপেক্ষায় আছে এবং তাদের মোট মূল্য।
+   - **ডাবল-এন্ট্রি জাবেদা সমতা (Double-Entry Ledger Status)**: ডেবিট ও ক্রেডিটের মধ্যে কোনো গরমিল আছে কিনা তার রিয়েল-টাইম নিশ্চয়তা (Variance: $0.00 - Balanced)।
+   - **চলমান ডিভাইস সার্ভিসিং (Device Repairs)**: ওয়ার্কবেঞ্চে থাকা সক্রিয় রিপেয়ার টিকিট সংখ্যা এবং ডেলিভারির জন্য প্রস্তুত ডিভাইসের আপডেট।
+
+2. **কুইক লঞ্চপ্যাড (১০টি দ্রুত এক্সেস শর্টকাট)**:
+   - ড্যাশবোর্ড থেকেই সরাসরি ১-ক্লিকে সেলস কাউন্টার `[F2]`, বারকোড স্টুডিও, স্টক প্লেসমেন্ট, নতুন সাপ্লায়ার পিও তৈরি, জাবেদা লেজার, স্টক অডিট, কম্বো প্রমোশন, ওমনিচ্যানেল অর্ডার এবং পিঅ্যান্ডএল (P&L) রিপোর্টে যাওয়া যায়।
+
+3. **সাম্প্রতিক বিক্রয় লেনদেন স্ট্রিম (Live Recent Sales Stream)**:
+   - আজকের সর্বশেষ সেলস রসিদ নম্বর, কাস্টমারের নাম, বিক্রিত মালামাল, পেমেন্ট মাধ্যম এবং মোট টাকার রিয়েল-টাইম টেবিল; যেখান থেকে যেকোনো রসিদ পুনরায় প্রিন্ট করা সম্ভব।
+
+4. **পেমেন্ট মাধ্যম অনুপাত মিটার (Tender Distribution Bar)**:
+   - নগদ (Cash), কার্ড (Card), মোবাইল ব্যাংকিং (MFS) এবং স্প্লিট পেমেন্টের শতকরা অনুপাত রঙিন বারের মাধ্যমে রিয়েল-টাইমে প্রদর্শন।
+
+5. **অপারেশনাল ওয়াচডগ রাডার (Operational Radar)**:
+   - যে পণ্যগুলোর স্টক শূন্য বা বিপজ্জনক সীমানায় আছে তাদের সরাসরি তালিকা এবং পাশেই ১-ক্লিকে **"Order PO"** বাটন।
 
 ---
 

@@ -1,0 +1,950 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>X Pro Wireless — Enterprise Retail ERP & POS System Documentation</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&family=Hind+Siliguri:wght@400;500;600;700&display=swap');
+
+  @page {
+    size: A4;
+    margin: 18mm 16mm 18mm 16mm;
+    @bottom-right {
+      content: counter(page) " / " counter(pages);
+      font-size: 8pt;
+      color: #64748b;
+    }
+  }
+
+  * {
+    box-sizing: border-box;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  body {
+    font-family: 'Plus Jakarta Sans', 'Hind Siliguri', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    color: #1e293b;
+    background: #ffffff;
+    line-height: 1.6;
+    font-size: 10pt;
+    margin: 0;
+    padding: 0;
+  }
+
+  /* Cover Page */
+  .cover-page {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    page-break-after: always;
+    padding: 40px 20px;
+    background: linear-gradient(135deg, #090d16 0%, #111827 100%);
+    color: #ffffff;
+    border-radius: 12px;
+  }
+
+  .cover-header {
+    border-bottom: 2px solid rgba(255, 106, 0, 0.4);
+    padding-bottom: 20px;
+  }
+
+  .cover-badge {
+    display: inline-block;
+    padding: 6px 14px;
+    background: rgba(255, 106, 0, 0.18);
+    border: 1px solid #FF6A00;
+    color: #FF851A;
+    font-size: 9pt;
+    font-weight: 700;
+    border-radius: 20px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .cover-title {
+    font-size: 28pt;
+    font-weight: 800;
+    line-height: 1.2;
+    margin: 24px 0 12px;
+    letter-spacing: -0.02em;
+    color: #ffffff;
+  }
+
+  .cover-subtitle {
+    font-size: 13pt;
+    color: #94a3b8;
+    line-height: 1.5;
+    margin-bottom: 20px;
+  }
+
+  .cover-bilingual-badge {
+    display: inline-block;
+    padding: 6px 16px;
+    background: #1e293b;
+    border-left: 4px solid #10b981;
+    color: #e2e8f0;
+    font-size: 10pt;
+    font-weight: 600;
+    margin-top: 10px;
+  }
+
+  .cover-meta-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    margin-top: 40px;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 8px;
+  }
+
+  .cover-meta-item strong {
+    display: block;
+    font-size: 8pt;
+    text-transform: uppercase;
+    color: #94a3b8;
+    letter-spacing: 0.05em;
+  }
+
+  .cover-meta-item span {
+    font-size: 11pt;
+    font-weight: 600;
+    color: #f1f5f9;
+  }
+
+  .cover-footer {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: 16px;
+    font-size: 9pt;
+    color: #64748b;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  /* Content Headings */
+  h1 {
+    font-size: 18pt;
+    font-weight: 800;
+    color: #0f172a;
+    border-bottom: 2px solid #FF6A00;
+    padding-bottom: 6px;
+    margin-top: 28px;
+    margin-bottom: 12px;
+    page-break-after: avoid;
+  }
+
+  h2 {
+    font-size: 14pt;
+    font-weight: 700;
+    color: #1e293b;
+    margin-top: 22px;
+    margin-bottom: 10px;
+    page-break-after: avoid;
+  }
+
+  h3 {
+    font-size: 12pt;
+    font-weight: 700;
+    color: #FF6A00;
+    margin-top: 18px;
+    margin-bottom: 8px;
+    page-break-after: avoid;
+  }
+
+  h4 {
+    font-size: 11pt;
+    font-weight: 600;
+    color: #334155;
+    margin-top: 14px;
+    margin-bottom: 6px;
+    page-break-after: avoid;
+  }
+
+  h5 {
+    font-size: 10pt;
+    font-weight: 600;
+    color: #475569;
+    margin-top: 10px;
+    margin-bottom: 4px;
+    page-break-after: avoid;
+  }
+
+  p, li {
+    color: #334155;
+    font-size: 9.5pt;
+    line-height: 1.6;
+  }
+
+  ul, ol {
+    padding-left: 20px;
+    margin: 6px 0 12px;
+  }
+
+  li {
+    margin-bottom: 4px;
+  }
+
+  strong {
+    color: #0f172a;
+    font-weight: 700;
+  }
+
+  /* Code & Syntax */
+  code {
+    font-family: 'JetBrains Mono', Consolas, Monaco, monospace;
+    font-size: 8.5pt;
+    background: #f1f5f9;
+    color: #c026d3;
+    padding: 2px 5px;
+    border-radius: 4px;
+    border: 1px solid #e2e8f0;
+  }
+
+  pre {
+    background: #0f172a;
+    color: #e2e8f0;
+    padding: 12px 16px;
+    border-radius: 8px;
+    overflow-x: auto;
+    font-family: 'JetBrains Mono', Consolas, monospace;
+    font-size: 8pt;
+    line-height: 1.45;
+    border-left: 4px solid #FF6A00;
+    margin: 12px 0;
+    page-break-inside: avoid;
+  }
+
+  pre code {
+    background: transparent;
+    color: #e2e8f0;
+    padding: 0;
+    border: none;
+  }
+
+  /* Tables */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 14px 0;
+    font-size: 8.5pt;
+    page-break-inside: avoid;
+  }
+
+  th {
+    background: #1e293b;
+    color: #ffffff;
+    font-weight: 700;
+    text-align: left;
+    padding: 8px 10px;
+    font-size: 8pt;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    border: 1px solid #334155;
+  }
+
+  td {
+    padding: 7px 10px;
+    border: 1px solid #e2e8f0;
+    color: #334155;
+    vertical-align: top;
+  }
+
+  tr:nth-child(even) td {
+    background: #f8fafc;
+  }
+
+  /* Blockquotes & Callouts */
+  blockquote {
+    border-left: 4px solid #FF6A00;
+    background: #fff7ed;
+    color: #9a3412;
+    padding: 10px 16px;
+    margin: 12px 0;
+    border-radius: 0 6px 6px 0;
+    font-size: 9pt;
+  }
+
+  hr {
+    border: none;
+    border-top: 1px solid #e2e8f0;
+    margin: 22px 0;
+  }
+
+  .doc-container {
+    max-width: 100%;
+  }
+</style>
+</head>
+<body>
+
+<!-- Cover Page -->
+<div class="cover-page">
+  <div class="cover-header">
+    <span class="cover-badge">Enterprise Software Architecture & Operational Specification</span>
+    <h1 class="cover-title">X PRO WIRELESS RETAIL ERP & OFFLINE-FIRST POS SYSTEM</h1>
+    <div class="cover-subtitle">
+      Comprehensive Architecture, Operational Manual & Engineering Specification<br>
+      Inspired by the Two-Brain iBOS Retail ERP Enterprise Architecture
+    </div>
+    <div class="cover-bilingual-badge">
+      🌐 Complete Bilingual Edition (English & বাংলা)
+    </div>
+  </div>
+
+  <div class="cover-meta-grid">
+    <div class="cover-meta-item">
+      <strong>System Version</strong>
+      <span>v1.0 Enterprise Production Ready</span>
+    </div>
+    <div class="cover-meta-item">
+      <strong>Release Date</strong>
+      <span>October 2026</span>
+    </div>
+    <div class="cover-meta-item">
+      <strong>Operating Architecture</strong>
+      <span>Two-Brain (Fast POS Counter + Deep ERP)</span>
+    </div>
+    <div class="cover-meta-item">
+      <strong>Primary Repository</strong>
+      <span>github.com/Shahin19998/X-Pro-Wireless-Retail-ERP-POS</span>
+    </div>
+    <div class="cover-meta-item">
+      <strong>Live Deployment URL</strong>
+      <span>shahin19998.github.io/X-Pro-Wireless-Retail-ERP-POS</span>
+    </div>
+    <div class="cover-meta-item">
+      <strong>Database & Accounting</strong>
+      <span>SQLite WAL / Double-Entry General Ledger</span>
+    </div>
+  </div>
+
+  <div class="cover-footer">
+    <div>CONFIDENTIAL & PROPRIETARY — X PRO WIRELESS INC.</div>
+    <div>Page 1 of Executive Manual</div>
+  </div>
+</div>
+
+<!-- Main Body -->
+<div class="doc-container">
+<h1 id="enterprise-retail-erp-offline-first-pos-system">📖 ENTERPRISE RETAIL ERP &amp; OFFLINE-FIRST POS SYSTEM</h1>
+<h2 id="complete-software-documentation-operational-manual-bilingual-english">Complete Software Documentation &amp; Operational Manual (Bilingual: English &amp; বাংলা)</h2>
+<h3 id="project-x-pro-wireless-retail-management-system-inspired-by-ibos-retail-erp">Project: X Pro Wireless &amp; Retail Management System (Inspired by iBOS Retail ERP)</h3>
+<hr />
+<h1 id="table-of-contents">📑 TABLE OF CONTENTS / সূচিপত্র</h1>
+<ol>
+<li><a href="#1-executive-overview--business-mission">Executive Overview &amp; Business Mission / নির্বাহী সারসংক্ষেপ ও উদ্দেশ্য</a></li>
+<li><a href="#2-system-architecture--technology-stack">System Architecture &amp; Technology Stack / সিস্টেম আর্কিটেকচার ও টেকনোলজি স্ট্যাক</a></li>
+<li><a href="#3-module-1-4-tier-rbac--governance">Module 1: 4-Tier RBAC &amp; Governance / ৪-স্তরের ভূমিকা ও নিরাপত্তা ম্যাট্রিক্স</a></li>
+<li><a href="#4-module-2-executive-dashboard--financial-liquidity">Module 2: Executive Dashboard &amp; Financial Liquidity / এক্সিকিউটিভ ড্যাশবোর্ড ও লিকুইডিটি</a></li>
+<li><a href="#5-module-3-procurement--vendor-management">Module 3: Procurement &amp; Vendor Management / প্রকিউরমেন্ট ও সরবরাহকারী ব্যবস্থাপনা</a></li>
+<li><a href="#6-module-4-inventory-runway-stock-audits--bundling">Module 4: Inventory Runway, Stock Audits &amp; Bundling / ইনভেন্টরি রানওয়ে, অডিট ও কম্বো</a></li>
+<li><a href="#7-module-5-automated-double-entry-accounting-engine">Module 5: Automated Double-Entry Accounting Engine / ডাবল-এন্ট্রি অ্যাকাউন্টিং ইঞ্জিন</a></li>
+<li><a href="#8-module-6-fast-billing-offline-first-pos">Module 6: Fast-Billing Offline-First POS / দ্রুতগতির অফলাইন-ফার্স্ট পিওএস</a></li>
+<li><a href="#9-module-7-customer-crm--loyalty-engine">Module 7: Customer CRM &amp; Loyalty Engine / কাস্টমার সিআরএম ও লয়্যালটি</a></li>
+<li><a href="#10-module-8-omnichannel-stock-synchronization">Module 8: Omnichannel Stock Synchronization / ওমনিচ্যানেল স্টক সিঙ্ক</a></li>
+<li><a href="#11-keyboard-first-hotkeys-guide">Keyboard-First Hotkeys Guide / কীবোর্ড শর্টকাট গাইড</a></li>
+<li><a href="#12-complete-rest-api-reference">Complete REST API Reference / পূর্ণাঙ্গ এপিআই রেফারেন্স</a></li>
+<li><a href="#13-database-schema-specification">Database Schema Specification / ডাটাবেস স্কিমা স্পেসিফিকেশন</a></li>
+<li><a href="#14-deployment--operations-guide">Deployment &amp; Operations Guide / ডিপ্লয়মেন্ট ও অপারেশন গাইড</a></li>
+</ol>
+<hr />
+<h1 id="1-executive-overview-business-mission">1. EXECUTIVE OVERVIEW &amp; BUSINESS MISSION</h1>
+<h3 id="_1">নির্বাহী সারসংক্ষেপ ও ব্যবসায়িক উদ্দেশ্য</h3>
+<h4 id="english">English:</h4>
+<p>This enterprise Retail ERP and Offline-First POS application is engineered to eliminate operational chaos in high-volume retail environments (e.g., supershops, mobile &amp; electronics retailers, repair centers). Inspired by the <strong>"Decoding iBOS Retail ERP"</strong> enterprise architecture, the system operates on a coordinated <strong>Two-Brain Architecture</strong>:
+1. <strong>The Deep-Thinking ERP Backend</strong>: Operates centrally in the cloud/server to automate procurement, real-time Weighted Average Cost (WAC) calculations, automated double-entry accounting journals, stock coverage runway predictions, and multi-channel stock sync.
+2. <strong>The Fast-Acting POS Frontend</strong>: Built for maximum counter speed with keyboard-first navigation, sub-100ms barcode scanning, multi-cart hold &amp; swap (cart parking), split tender payments, and resilient <strong>offline-first local caching</strong> via browser-native IndexedDB.</p>
+<h4 id="_2">বাংলা:</h4>
+<p>এই এন্টারপ্রাইজ রিটেইল ইআরপি (ERP) এবং অফলাইন-ফার্স্ট পিওএস (POS) সফটওয়্যারটি রিটেইল ব্যবসা ও সুপার-শপের সামগ্রিক বিশৃঙ্খলা দূর করার জন্য তৈরি করা হয়েছে। <strong>"Decoding iBOS Retail ERP"</strong>-এর ব্যবসায়িক দর্শনের আলোকে এটি একটি <strong>দ্বৈত-ইঞ্জিন (Two-Brain)</strong> আর্কিটেকচারে কাজ করে:
+1. <strong>ডিপ-থিঙ্কিং ব্যাকএন্ড ইআরপি (ERP Backend)</strong>: স্বয়ংক্রিয় প্রকিউরমেন্ট, ওয়েটেড এভারেজ কস্ট (WAC) রিক্যালকুলেশন, জিরো-ম্যানুয়াল ডাবল-এন্ট্রি অ্যাকাউন্টিং, স্টক রানওয়ে প্রিডিকশন এবং ওমনিচ্যানেল স্টক নিয়ন্ত্রণ করে।
+2. <strong>ফাস্ট-অ্যাক্টিং ফ্রন্টএন্ড পিওএস (POS Frontend)</strong>: কাউন্টারে আলোর গতিতে বিল করার জন্য কীবোর্ড-ফার্স্ট অপশন, বারকোড স্ক্যানার, মাল্টি-কার্ট হোল্ড অ্যান্ড সুইচ (ট্যাব পার্কিং), স্প্লিট পেমেন্ট (ক্যাশ, কার্ড, বিকাশ/নগদ) এবং <strong>ইন্টারনেট সংযোগ বিচ্ছিন্ন হলেও লোকাল ব্রাউজারে লেনদেন সচল রাখার (IndexedDB)</strong> সুবিধা প্রদান করে।</p>
+<hr />
+<h1 id="2-system-architecture-technology-stack">2. SYSTEM ARCHITECTURE &amp; TECHNOLOGY STACK</h1>
+<h3 id="_3">সিস্টেম আর্কিটেকচার ও টেকনোলজি স্ট্যাক</h3>
+<pre><code>+---------------------------------------------------------------------------------+
+|                                 CLIENT TIER                                     |
+|  +---------------------------+  +----------------------+  +------------------+  |
+|  |     Fast Checkout POS     |  |    Executive ERP     |  |   IndexedDB V1   |  |
+|  |  (Keyboard, Gun, Split)   |  | (Trial Bal, P&amp;L, PO) |  |  (Offline Queue) |  |
+|  +---------------------------+  +----------------------+  +------------------+  |
++----------------------------------------|----------------------------------------+
+                                         | HTTP / JSON REST APIs
++----------------------------------------v----------------------------------------+
+|                                APPLICATION TIER                                 |
+|  +---------------------------------------------------------------------------+  |
+|  |                Python 3 Multi-Threaded HTTP Server Daemon                 |  |
+|  |  - Automated Journal Posting Engine      - PO State Machine &amp; WAC Calc     |  |
+|  |  - Coverage Days Run-Rate Analyzer      - Defensive Bundle Pricing Guard  |  |
+|  |  - 4-Tier RBAC Permission Enforcement   - Omnichannel Stock Reservation   |  |
+|  +---------------------------------------------------------------------------+  |
++----------------------------------------|----------------------------------------+
+                                         | SQLite WAL Transactions (ACID)
++----------------------------------------v----------------------------------------+
+|                                  DATA TIER                                      |
+|  +---------------------------------------------------------------------------+  |
+|  |                  xpro_store.db (SQLite in WAL Mode)                       |  |
+|  |  17-Account Chart of Accounts | Suppliers | POs | GRNs | Combos | Audits  |  |
++---------------------------------------------------------------------------------+
+</code></pre>
+<ul>
+<li><strong>Backend Runtime</strong>: Python 3 standard library (<code>http.server</code>, <code>urllib</code>, <code>sqlite3</code>, <code>hashlib</code>, <code>json</code>). Zero heavy external dependencies, sub-millisecond execution latency.</li>
+<li><strong>Database Architecture</strong>: SQLite with Write-Ahead Logging (<code>PRAGMA journal_mode=WAL</code>), foreign keys enabled (<code>PRAGMA foreign_keys=ON</code>), and atomic transactions (<code>BEGIN IMMEDIATE</code>).</li>
+<li><strong>Styling &amp; Aesthetics</strong>: Vanilla CSS with custom design system: Obsidian Black (<code>#07090E</code>), Electric Amber (<code>#FF6A00</code>), Emerald Accent (<code>#00E676</code>), and Pure White (<code>#FFFFFF</code>).</li>
+<li><strong>Offline Storage</strong>: Native HTML5 IndexedDB (<code>xpro_retail_offline_v1</code>) supporting asynchronous transaction caching and background sync without external libraries.</li>
+</ul>
+<hr />
+<h1 id="3-module-1-4-tier-rbac-governance">3. MODULE 1: 4-TIER RBAC &amp; GOVERNANCE</h1>
+<h3 id="-">৪-স্তরের ভূমিকা ও নিরাপত্তা ম্যাট্রিক্স</h3>
+<p>সিস্টেমে ৪টি সুনির্দিষ্ট পারমিশন গ্রুপ রয়েছে (ভিডিওর স্লাইড ১৮ অনুসারে):</p>
+<pre><code>👑 Master Login (Owner)
+         │
+         ▼
+📋 Manager (Approvals)
+         │
+         ▼
+🦺 Floor In-Charge (Receiving)
+         │
+         ▼
+💳 Cashier / POS Exec (Billing)
+</code></pre>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Permission Feature / ক্ষমতা</th>
+<th style="text-align: center;">👑 Master (Owner)</th>
+<th style="text-align: center;">📋 Manager</th>
+<th style="text-align: center;">🦺 Floor In-Charge</th>
+<th style="text-align: center;">💳 Cashier</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">POS Fast Billing &amp; Receipts</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">❌</td>
+<td style="text-align: center;">✅</td>
+</tr>
+<tr>
+<td style="text-align: left;">Product Barcode Lookup &amp; Print</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅</td>
+</tr>
+<tr>
+<td style="text-align: left;">Inventory Stock Adjustment (Theft)</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅ (Approval)</td>
+<td style="text-align: center;">❌</td>
+<td style="text-align: center;">❌</td>
+</tr>
+<tr>
+<td style="text-align: left;">Create Purchase Order (PO)</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅ (Draft)</td>
+<td style="text-align: center;">❌</td>
+</tr>
+<tr>
+<td style="text-align: left;">Approve Purchase Order</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">❌</td>
+<td style="text-align: center;">❌</td>
+</tr>
+<tr>
+<td style="text-align: left;">Receive Goods &amp; GRN Trigger</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">❌</td>
+</tr>
+<tr>
+<td style="text-align: left;">View Cost of Goods &amp; Profit Margins</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">❌</td>
+<td style="text-align: center;">❌</td>
+</tr>
+<tr>
+<td style="text-align: left;">Double-Entry Trial Balance &amp; P&amp;L</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">❌</td>
+<td style="text-align: center;">❌</td>
+</tr>
+<tr>
+<td style="text-align: left;">Shift Float Open / Close</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">❌</td>
+<td style="text-align: center;">✅</td>
+</tr>
+<tr>
+<td style="text-align: left;">Store Policies &amp; System Audit Logs</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">❌</td>
+<td style="text-align: center;">❌</td>
+<td style="text-align: center;">❌</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h1 id="4-module-2-executive-command-center-dashboard-financial-liquidity">4. MODULE 2: EXECUTIVE COMMAND CENTER DASHBOARD &amp; FINANCIAL LIQUIDITY</h1>
+<h3 id="-_1">এক্সিকিউটিভ কমান্ড সেন্টার ড্যাশবোর্ড ও রিয়েল-টাইম অপারেশনাল কন্ট্রোল</h3>
+<h4 id="english_1">English:</h4>
+<p>The Executive Dashboard serves as the central operational nerve center of the entire enterprise. It delivers an instantaneous high-level overview of where what is happening across the business without requiring manual report exports or spreadsheet reconciliations.</p>
+<h5 id="core-architecture-components">Core Architecture &amp; Components:</h5>
+<ol>
+<li><strong>8-Hero Operational KPI Grid</strong>:</li>
+<li><strong>Today's Gross Sales</strong>: Real-time gross turnover, total completed transactions, and average basket value.</li>
+<li><strong>Estimated Gross Profit &amp; Margin</strong>: Real-time profit calculated against Weighted Average Cost (COGS) and profit margin percentage.</li>
+<li><strong>Total Inventory Asset Valuation</strong>: Dual calculation showing Total Value at Cost ($) alongside Total Value at Retail ($), across all active SKUs and physical units.</li>
+<li><strong>Register Drawer &amp; Liquid Cash</strong>: Immediate aggregation of Petty Cash in Drawer (<code>1010</code>), Bank Operating Capital (<code>1020</code>), and Mobile Money / MFS Wallets (<code>1030</code>).</li>
+<li><strong>Critical Low Stock Alerts</strong>: Instant alert count of items falling below safety stock runway thresholds.</li>
+<li><strong>Open Purchase Orders</strong>: Live pending supplier orders awaiting inward Goods Receipt Note (GRN) inspection.</li>
+<li><strong>Double-Entry General Ledger Balance</strong>: Automatic real-time verification confirming Total Debits equal Total Credits with zero variance.</li>
+<li>
+<p><strong>Device Repair Workbench</strong>: Live count of active repair tickets, distinguishing devices in diagnostic bench from those ready for customer pickup.</p>
+</li>
+<li>
+<p><strong>Executive Quick Launchpad (10-Tile Rapid Navigator)</strong>:</p>
+</li>
+<li>
+<p>One-click shortcuts directly into: POS Counter <code>[F2]</code>, Barcode Label Studio, Inventory Placement, Supplier PO Creation, General Ledger JV, Stock Shrinkage Audit, Combo Bundles, Omnichannel Web Orders, Repair Workbench, and 12-Month P&amp;L Analytics.</p>
+</li>
+<li>
+<p><strong>Live Sales &amp; Counter Stream</strong>:</p>
+</li>
+<li>
+<p>Real-time tabular stream of the latest completed transactions displaying Receipt #, Time, Customer Name, Items Sold, Payment Method, and Amount with 1-click <strong>Receipt Reprint</strong> capabilities.</p>
+</li>
+<li>
+<p><strong>Payment Tender Distribution Meter</strong>:</p>
+</li>
+<li>
+<p>Color-coded proportional visual bar displaying real-time settlement mix: Cash (Green), Credit/Debit Card (Sky Blue), Mobile Money / Bank (Purple), and Split Payments (Amber).</p>
+</li>
+<li>
+<p><strong>Operational Watchdog Radar</strong>:</p>
+</li>
+<li><strong>Critical Stock Reorder Radar</strong>: Displays top items nearing stock-out with instant <strong>1-Click PO Reorder</strong> button.</li>
+<li><strong>Omnichannel Queue</strong>: Live incoming web and marketplace orders awaiting dispatch.</li>
+</ol>
+<h4 id="_4">বাংলা:</h4>
+<p>এক্সিকিউটিভ ড্যাশবোর্ড হলো পুরো রিটেইল এন্টারপ্রাইজের কেন্দ্রীয় কন্ট্রোল সেন্টার বা মূল স্নায়ুকেন্দ্র। কোনো এক্সেল শিট বা খাতা-কলম ছাড়াই এক পলকে প্রতিষ্ঠানের কোথায় কী ঘটছে তা সরাসরি দেখার জন্য এটি তৈরি করা হয়েছে।</p>
+<h5 id="_5">মূল ফিচার ও কম্পোনেন্টসমূহ:</h5>
+<ol>
+<li><strong>৮টি হিরো অপারেশনাল কেপিআই (KPI) কার্ড</strong>:</li>
+<li><strong>আজকের মোট বিক্রি (Today's Gross Sales)</strong>: আজকের মোট বিক্রয়মূল্য ($), মোট লেনদেনের সংখ্যা এবং গড় বাস্কেট সাইজ।</li>
+<li><strong>মোট মুনাফা ও মার্জিন (Estimated Profit &amp; Margin)</strong>: বিক্রিত পণ্যের ক্রয়মূল্য (COGS) বাদ দিয়ে আজকের নিট মুনাফা এবং শতকরা লাভের মার্জিন (Margin %)।</li>
+<li><strong>ইনভেন্টরি মোট সম্পদ মূল্য (Inventory Valuation)</strong>: গুদামে থাকা মোট মালের ক্রয়মূল্য (Cost Valuation) এবং সম্ভাব্য বিক্রয়মূল্য (Retail Valuation), মোট পিস এবং এসকেইউ (SKU) সংখ্যা।</li>
+<li><strong>রেজিস্টার ক্যাশ ও লিকুইডিটি (Drawer &amp; Liquid Cash)</strong>: ক্যাশ কাউন্টারে থাকা নগদ ক্যাশ (<code>1010</code>), ব্যাংকের চলতি মূলধন (<code>1020</code>), এবং বিকাশ/নগদ ওয়ালেটের মোট যোগফল।</li>
+<li><strong>কম স্টক সতর্কতা (Low Stock Alerts)</strong>: যে সমস্ত পণ্যের স্টক সেফটি লিমিটের নিচে নেমে গেছে তাদের জরুরি অ্যালার্ট সংখ্যা।</li>
+<li><strong>বকেয়া ক্রয়াদেশ (Open Purchase Orders)</strong>: সরবরাহকারীদের কাছে পাঠানো কতটি পিও (PO) এখনও মাল আসার অপেক্ষায় আছে এবং তাদের মোট মূল্য।</li>
+<li><strong>ডাবল-এন্ট্রি জাবেদা সমতা (Double-Entry Ledger Status)</strong>: ডেবিট ও ক্রেডিটের মধ্যে কোনো গরমিল আছে কিনা তার রিয়েল-টাইম নিশ্চয়তা (Variance: $0.00 - Balanced)।</li>
+<li>
+<p><strong>চলমান ডিভাইস সার্ভিসিং (Device Repairs)</strong>: ওয়ার্কবেঞ্চে থাকা সক্রিয় রিপেয়ার টিকিট সংখ্যা এবং ডেলিভারির জন্য প্রস্তুত ডিভাইসের আপডেট।</p>
+</li>
+<li>
+<p><strong>কুইক লঞ্চপ্যাড (১০টি দ্রুত এক্সেস শর্টকাট)</strong>:</p>
+</li>
+<li>
+<p>ড্যাশবোর্ড থেকেই সরাসরি ১-ক্লিকে সেলস কাউন্টার <code>[F2]</code>, বারকোড স্টুডিও, স্টক প্লেসমেন্ট, নতুন সাপ্লায়ার পিও তৈরি, জাবেদা লেজার, স্টক অডিট, কম্বো প্রমোশন, ওমনিচ্যানেল অর্ডার এবং পিঅ্যান্ডএল (P&amp;L) রিপোর্টে যাওয়া যায়।</p>
+</li>
+<li>
+<p><strong>সাম্প্রতিক বিক্রয় লেনদেন স্ট্রিম (Live Recent Sales Stream)</strong>:</p>
+</li>
+<li>
+<p>আজকের সর্বশেষ সেলস রসিদ নম্বর, কাস্টমারের নাম, বিক্রিত মালামাল, পেমেন্ট মাধ্যম এবং মোট টাকার রিয়েল-টাইম টেবিল; যেখান থেকে যেকোনো রসিদ পুনরায় প্রিন্ট করা সম্ভব।</p>
+</li>
+<li>
+<p><strong>পেমেন্ট মাধ্যম অনুপাত মিটার (Tender Distribution Bar)</strong>:</p>
+</li>
+<li>
+<p>নগদ (Cash), কার্ড (Card), মোবাইল ব্যাংকিং (MFS) এবং স্প্লিট পেমেন্টের শতকরা অনুপাত রঙিন বারের মাধ্যমে রিয়েল-টাইমে প্রদর্শন।</p>
+</li>
+<li>
+<p><strong>অপারেশনাল ওয়াচডগ রাডার (Operational Radar)</strong>:</p>
+</li>
+<li>যে পণ্যগুলোর স্টক শূন্য বা বিপজ্জনক সীমানায় আছে তাদের সরাসরি তালিকা এবং পাশেই ১-ক্লিকে <strong>"Order PO"</strong> বাটন।</li>
+</ol>
+<hr />
+<h1 id="5-module-3-procurement-vendor-management">5. MODULE 3: PROCUREMENT &amp; VENDOR MANAGEMENT</h1>
+<h3 id="_6">প্রকিউরমেন্ট ও সরবরাহকারী ব্যবস্থাপনা</h3>
+<h4 id="1-digital-purchase-order-po-state-machine">1. Digital Purchase Order (PO) State Machine</h4>
+<pre><code>[DRAFT] ────(Submit)────► [PENDING_APPROVAL] ────(Approve)────► [APPROVED] ────(Receive)────► [RECEIVED (GRN)]
+   │                             │                           │
+   └───────────(Cancel)──────────┴───────────(Cancel)────────┴───────────────────────────► [CANCELLED]
+</code></pre>
+<h4 id="2-the-atomic-goods-receipt-trigger-receive">2. The Atomic Goods Receipt Trigger ("Receive" বাটন ক্লিক করার প্রক্রিয়া):</h4>
+<p>যখন গুদাম বা স্টোরের রিসিভিং স্টাফ মাল ডেলিভারি পেয়ে <strong>"Receive Goods"</strong> বাটনে ক্লিক করে, ব্যাকএন্ডে একটি অ্যাটমিক ডাটাবেস ট্রানজ্যাকশনে ৪টি কাজ সম্পন্ন হয়:
+1. <strong>Stock Increment</strong>: টার্গেট পণ্যের ফিজিক্যাল স্টক ইনভেন্টরিতে তৎক্ষণাৎ যোগ হয়।
+2. <strong>Weighted Average Cost (WAC) Recalculation</strong>:
+   $$\text{New Cost} = \frac{(\text{Current Stock} \times \text{Current Cost}) + (\text{Received Qty} \times \text{PO Unit Cost})}{\text{Current Stock} + \text{Received Qty}}$$
+3. <strong>Accounts Payable (AP) Ledger Credit</strong>: সরবরাহকারীর লেজারে মোট বিলের সমপরিমাণ টাকা ক্রেডিট (দেনা) হিসেবে জমা হয়।
+4. <strong>Automated Journal Posting</strong>: জিরো-ম্যানুয়াল জার্নাল পোস্টিং সম্পন্ন হয়:
+   - <strong>Debit</strong>: <code>1200 - Inventory Asset</code> (সম্পদ বৃদ্ধি)
+   - <strong>Credit</strong>: <code>2010 - Accounts Payable</code> (দায় বৃদ্ধি)</p>
+<hr />
+<h1 id="6-module-4-inventory-runway-stock-audits-bundling">6. MODULE 4: INVENTORY RUNWAY, STOCK AUDITS &amp; BUNDLING</h1>
+<h3 id="_7">ইনভেন্টরি রানওয়ে, অডিট ও কম্বো ইঞ্জিন</h3>
+<h4 id="1-coverage-days-runway-algorithm">1. Coverage Days Runway Algorithm (কভারেজ রানওয়ে ফর্মুলা)</h4>
+<p>$$\text{Daily Sales Velocity} = \frac{\text{Sales in Last 30 Days}}{30}$$
+$$\text{Coverage Days Runway} = \frac{\text{Current Stock Quantity}}{\text{Daily Sales Velocity}}$$</p>
+<ul>
+<li><strong>CRITICAL REORDER (⚠️ লাল)</strong>: রানওয়ে &lt; ৭ দিন।</li>
+<li><strong>FAST MOVING (🔥 কমলা)</strong>: দৈনিক বিক্রি উচ্চ এবং রানওয়ে ৭-১৫ দিন।</li>
+<li><strong>NORMAL (🟢 সবুজ)</strong>: রানওয়ে ১৫-৪৫ দিন।</li>
+<li><strong>SLOW MOVING (💤 নীল)</strong>: রানওয়ে &gt; ৪৫ দিন (স্টক জমে আছে)।</li>
+</ul>
+<h4 id="2-physical-stock-count-discrepancy-reconciliation">2. Physical Stock Count Discrepancy Reconciliation (স্টক অডিট ও গরমিল সমাধান)</h4>
+<ul>
+<li><strong>দৃশ্যপট</strong>: সিস্টেমে রেকর্ড ১৫০২ টি, কিন্তু ফিজিক্যাল গণনায় পাওয়া গেল ১৫০০ টি।</li>
+<li>ক্যাশিয়ার চুপিসারে ঘাটতি মুছতে পারবে না। ম্যানেজার অডিট স্ক্রিনে কারণ নির্বাচন করবেন:</li>
+<li><em>Theft / Pilferage (চুরি বা চুরিজনিত ক্ষতি)</em></li>
+<li><em>Damage / Breakage in Store (দোকানে ভেঙে যাওয়া)</em></li>
+<li><em>Unrecorded Retail Sale (আনরেকর্ডেড বিক্রি)</em></li>
+<li><em>Supplier Entry Error (সাপ্লায়ার ডাটা এন্ট্রি ভুল)</em></li>
+<li><strong>অটো-পোস্টিং</strong>: অনুমোদন দিলে সাথে সাথে স্টক অ্যাডজাস্ট হয় এবং ঘাটতির কেনা মূল্য সরাসরি P&amp;L একাউন্টে পোস্টিং হয়:</li>
+<li><strong>Debit</strong>: <code>5020 - Inventory Shrinkage &amp; Loss</code> (P&amp;L ক্ষতি)</li>
+<li><strong>Credit</strong>: <code>1200 - Inventory Asset</code> (সম্পদ হ্রাস)</li>
+</ul>
+<h4 id="3-combos-bundling-engine">3. Combos &amp; Bundling Engine (ডিফেন্সিভ কম্বো ও বান্ডেল ইঞ্জিন)</h4>
+<ul>
+<li>একাধিক পণ্য একত্র করে স্পেশাল প্রমোশন তৈরি (যেমন: <em>১০ কেজি চাল + ২৫০ গ্রাম চিনি</em> অথবা <em>আইফোন কেস + গ্লাস প্রোটেক্টর</em>)।</li>
+<li><strong>Defensive Pricing Check</strong>: কম্বোর বিক্রয়মূল্য উপাদানগুলোর যৌথ কেনা খরচের (COGS) নিচে নামলে সিস্টেম লাল সতর্কবার্তা দিয়ে সেভ বাটন লক করে দেবে।</li>
+<li><strong>Real-Time Stock Consumption</strong>: কাউন্টারে কম্বো বারকোড স্ক্যান করে বিক্রি করলে উপাদানগুলোর স্টক তৎক্ষণাৎ আনুপাতিক হারে কমে যাবে।</li>
+</ul>
+<hr />
+<h1 id="7-module-5-automated-double-entry-accounting-engine">7. MODULE 5: AUTOMATED DOUBLE-ENTRY ACCOUNTING ENGINE</h1>
+<h3 id="-_2">স্বয়ংক্রিয় ডাবল-এন্ট্রি অ্যাকাউন্টিং ইঞ্জিন</h3>
+<h4 id="zero-manual-posting-philosophy-">Zero-Manual Posting Philosophy (জিরো-ম্যানুয়াল জার্নাল ফিলোসফি):</h4>
+<p>কোনো হিসাবরক্ষকের ম্যানুয়ালি ডেবিট-ক্রেডিট এন্ট্রি দিতে হয় না। প্রতিটি ব্যবসায়িক ইভেন্টে সিস্টেম নিজে জার্নাল তৈরি করে:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">ব্যবসায়িক ইভেন্ট</th>
+<th style="text-align: left;">ডেবিট একাউন্ট (Dr)</th>
+<th style="text-align: left;">ক্রেডিট একাউন্ট (Cr)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>পিও গুডস রিসিভ (GRN)</strong></td>
+<td style="text-align: left;"><code>1200 - Inventory Asset</code></td>
+<td style="text-align: left;"><code>2010 - Accounts Payable</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>পিওএস ক্যাশ সেল</strong></td>
+<td style="text-align: left;"><code>1010 - Petty Cash</code></td>
+<td style="text-align: left;"><code>4010 - Retail Sales Revenue</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><em>(স্বয়ংক্রিয় COGS এন্ট্রি)</em></td>
+<td style="text-align: left;"><code>5010 - COGS Merchandise</code></td>
+<td style="text-align: left;"><code>1200 - Inventory Asset</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>পিওএস কার্ড সেল</strong></td>
+<td style="text-align: left;"><code>1020 - Operating Bank Account</code></td>
+<td style="text-align: left;"><code>4010 - Retail Sales Revenue</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>পিওএস বিকাশ/নগদ সেল</strong></td>
+<td style="text-align: left;"><code>1030 - MFS Account</code></td>
+<td style="text-align: left;"><code>4010 - Retail Sales Revenue</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>স্টক ঘাটতি (Shrinkage)</strong></td>
+<td style="text-align: left;"><code>5020 - Shrinkage &amp; Loss</code></td>
+<td style="text-align: left;"><code>1200 - Inventory Asset</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>সাপ্লায়ার বিল পেমেন্ট</strong></td>
+<td style="text-align: left;"><code>2010 - Accounts Payable</code></td>
+<td style="text-align: left;"><code>1020 - Operating Bank Account</code></td>
+</tr>
+</tbody>
+</table>
+<h4 id="chart-of-accounts">Chart of Accounts (১৭টি স্ট্যান্ডার্ড চার্ট অব অ্যাকাউন্টস):</h4>
+<ol>
+<li><strong>Assets (1000s)</strong>: <code>1010 Cash</code>, <code>1020 Bank</code>, <code>1030 MFS</code>, <code>1100 AR</code>, <code>1200 Inventory Asset</code>, <code>1300 Fixtures</code></li>
+<li><strong>Liabilities (2000s)</strong>: <code>2010 Accounts Payable</code>, <code>2020 Sales Tax / VAT Payable</code></li>
+<li><strong>Equity (3000s)</strong>: <code>3010 Owner Equity / Retained Earnings</code></li>
+<li><strong>Revenue (4000s)</strong>: <code>4010 Retail Sales</code>, <code>4020 Repair Revenue</code>, <code>4030 Service Commissions</code></li>
+<li><strong>COGS (5000s)</strong>: <code>5010 Cost of Goods Sold</code>, <code>5020 Shrinkage Loss</code></li>
+<li><strong>Operating Expenses (6000s)</strong>: <code>6010 Rent</code>, <code>6020 Utilities &amp; Internet</code>, <code>6030 Wages &amp; Salaries</code></li>
+</ol>
+<blockquote>
+<p>[!NOTE]
+<strong>Dynamic Trial Balance Verification</strong>: সিস্টেমের ট্রায়াল ব্যালেন্সে মোট ডেবিট এবং মোট ক্রেডিট সর্বদা সেন্ট-লেভেলে সমান থাকে (<code>is_balanced: True</code>)। যদি এক সেন্টেরও অমিল হয়, সিস্টেম অ্যালার্ট জারি করে।</p>
+</blockquote>
+<hr />
+<h1 id="8-module-6-fast-billing-offline-first-pos">8. MODULE 6: FAST-BILLING OFFLINE-FIRST POS</h1>
+<h3 id="-_3">দ্রুতগতির অফলাইন-ফার্স্ট পিওএস</h3>
+<h4 id="1-hardware-barcode-scanner-web-audio-feedback">1. Hardware Barcode Scanner &amp; Web Audio Feedback:</h4>
+<ul>
+<li>যেকোনো USB বা Bluetooth বারকোড স্ক্যানার গানে প্রোডাক্টের কোড স্ক্যান করলে ১০০ মিলিসেকেন্ডের নিচে প্রোডাক্ট কার্টে যোগ হয়।</li>
+<li>প্রতিটি সফল স্ক্যানে বিল্ট-ইন ওয়েব অডিও সিন্থেসাইজারে ১.৬ kHz ক্রিস্প বিফ (Beep) শব্দ বেজে ওঠে।</li>
+</ul>
+<h4 id="2-multi-cart-hold-switch">2. Multi-Cart Hold &amp; Switch (কার্ট পার্কিং / সোয়াপিং):</h4>
+<ul>
+<li><strong>দৃশ্যপট</strong>: কাস্টমার লাইনে দাঁড়িয়ে বিল করার সময় হঠাৎ মনে পড়ল অন্য কিছু আনা হয়নি এবং সেলফের দিকে চলে গেল।</li>
+<li>ক্যাশিয়ার <strong><code>[F3]</code></strong> চাপলে কার্টটি তৎক্ষণাৎ ব্যাকগ্রাউন্ডে হোল্ড (Parked) হয়ে যায় এবং নতুন কাস্টমারের জন্য ফ্রেশ কার্ট খুলে যায়।</li>
+<li>কাস্টমার ফিরে আসলে <strong><code>[F4]</code></strong> চেপে পূর্বের কার্ট এক ক্লিকে রিস্টোর করে বিল সম্পন্ন করা যায়।</li>
+</ul>
+<h4 id="3-multi-tender-split-payment-modal-f8">3. Multi-Tender Split Payment Modal (<code>[F8]</code>):</h4>
+<ul>
+<li>একই বিলে কাস্টমার চাইলে একাধিক মাধ্যমে পেমেন্ট করতে পারে:</li>
+<li>কিয়দাংশ ক্যাশে (Cash)</li>
+<li>কিয়দাংশ কার্ডে (Stripe / POS Terminal Card)</li>
+<li>কিয়দাংশ মোবাইলে (bKash / Nagad TrxID)</li>
+<li>লাইভ টেন্ডার এবং কাস্টমারকে ফেরত দেওয়ার জন্য ভাংতি পয়সা (Change Due) নিখুঁতভাবে প্রদর্শিত হয়।</li>
+</ul>
+<h4 id="4-resilient-offline-first-architecture-indexeddb-engine">4. Resilient Offline-First Architecture (IndexedDB Engine):</h4>
+<ul>
+<li>ইন্টারনেট সম্পূর্ণ বন্ধ হয়ে গেলেও কাউন্টার বিন্দুমাত্র থামবে না।</li>
+<li>সমস্ত ক্যাটালগ ব্রাউজারের লোকাল IndexedDB-তে ক্যাশ করা থাকে।</li>
+<li>অফলাইনে সম্পন্ন সেলসগুলো ক্রিপ্টোগ্রাফিক ইউনিক আইডি (<code>OFFLINE-...</code>) সহ IndexedDB-তে কিউ (Queue) হয়ে থাকে এবং লোকাল রিসিট প্রিন্ট হয়।</li>
+<li>ইন্টারনেট ফিরে আসার সাথে সাথে সিস্টেম অটোমেটিক ব্যাকগ্রাউন্ডে সব অফলাইন সেলস সেন্ট্রাল ERP-তে পুশ করে কেন্দ্রীয় স্টক এবং অ্যাকাউন্টস আপডেট করে দেয়।</li>
+</ul>
+<h4 id="5-cashier-shift-reconciliation">5. Cashier Shift Reconciliation (শিফট ফ্লোট ও হিসাব মেলানো):</h4>
+<ul>
+<li>শিফট শুরু: ক্যাশ ড্রয়ারে শুরুতেই কত ক্যাশ ছিল (Opening Float) তা রেকর্ড করা।</li>
+<li>শিফট চলাকালীন: ক্যাশিয়ার কত ডিসকাউন্ট দিয়েছে তার অডিট হিস্টোরি সংরক্ষণ।</li>
+<li>শিফট সমাপ্তি (<code>[F10]</code>): ড্রয়ারে কত ক্যাশ থাকার কথা এবং ক্যাশিয়ার গুনে কত ক্যাশ বুঝিয়ে দিয়েছে তার রিকনসিলিয়েশন রিপোর্ট।</li>
+</ul>
+<hr />
+<h1 id="9-module-7-customer-crm-loyalty-engine">9. MODULE 7: CUSTOMER CRM &amp; LOYALTY ENGINE</h1>
+<h3 id="_8">কাস্টমার সিআরএম ও লয়্যালটি ইঞ্জিন</h3>
+<ul>
+<li><strong>ফোন নম্বর দিয়ে দ্রুত কাস্টমার অনুসন্ধান</strong>: ফোন নম্বর টাইপ করার সাথে সাথে কাস্টমারের নাম, লাইফটাইম স্পেন্ড এবং অর্ডারের সংখ্যা চলে আসে।</li>
+<li><strong>Loyalty Points Accrual</strong>: প্রতি $১০ (বা সমমানের) কেনাকাটায় ১ পয়েন্ট জমা হয়।</li>
+<li><strong>Loyalty Points Redemption</strong>: চেকআউটে পয়েন্ট রিডিম করে ডিসকাউন্ট পাওয়া যায় (প্রতি ১০ পয়েন্টে $১.০০ স্টোর ডিসকাউন্ট)।</li>
+<li><strong>Promotional Coupons</strong>: প্রমোশনাল কোড যেমন <code>WELCOME10</code>, <code>SAVE5</code>, <code>VIP20</code> প্রয়োগ করে শতকরা বা নির্দিষ্ট অংকের ছাড় দেওয়ার ব্যবস্থা।</li>
+</ul>
+<hr />
+<h1 id="10-module-8-omnichannel-stock-synchronization">10. MODULE 8: OMNICHANNEL STOCK SYNCHRONIZATION</h1>
+<h3 id="_9">ওমনিচ্যানেল স্টক সিঙ্ক্রোনাইজেশন</h3>
+<ul>
+<li><strong>সেন্ট্রাল স্টক ব্লকিং</strong>: ওয়েব স্টোর, শপিফাই, হোয়াটসঅ্যাপ বা ফোনের মাধ্যমে অনলাইন অর্ডার আসার সাথে সাথে গুদামের সেন্ট্রাল ফিজিক্যাল স্টক থেকে ইউনিটটি "RESERVED" হয়ে যায়, যাতে দোকানে উপস্থিত ক্যাশিয়ার সেই পণ্য ভুলবশত অন্য কারও কাছে বিক্রি করে ওভারসেলিং না করে।</li>
+<li><strong>ক্যাশ অন ডেলিভারি (COD) রিটার্ন রিস্টকিং</strong>: পার্সেল কাস্টমার রিসিভ না করলে বা ক্যানসেল হলে এক ক্লিকে "Restock" করলে সংরক্ষিত পণ্য পুনরায় এভেইলেবল স্টকে ফিরে আসে।</li>
+</ul>
+<hr />
+<h1 id="11-keyboard-first-hotkeys-guide">11. KEYBOARD-FIRST HOTKEYS GUIDE</h1>
+<h3 id="_10">কীবোর্ড শর্টকাট রেফারেন্স</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">কীবোর্ড কী</th>
+<th style="text-align: left;">ফাংশন ও কার্যকারিতা</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><strong><code>F1</code></strong></td>
+<td style="text-align: left;"><strong>Quick Help / Hotkeys Cheat Sheet</strong>: হটকি রেফারেন্স মোডাল খোলে।</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong><code>F2</code></strong></td>
+<td style="text-align: left;"><strong>Barcode Scanner / Search Focus</strong>: কার্সার সরাসরি বারকোড ইনপুটে নিয়ে যায়।</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong><code>F3</code></strong></td>
+<td style="text-align: left;"><strong>Hold Active Cart (Park Cart)</strong>: বর্তমান কাস্টমারের কার্ট হোল্ড করে রাখে।</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong><code>F4</code></strong></td>
+<td style="text-align: left;"><strong>Switch / Resume Held Carts</strong>: পার্ক করা পূর্ববর্তী কার্টে সুইচ করে।</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong><code>F8</code></strong></td>
+<td style="text-align: left;"><strong>Open Split Tender Modal</strong>: স্প্লিট পেমেন্ট (ক্যাশ, কার্ড, বিকাশ/নগদ) স্ক্রিন খোলে।</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong><code>F9</code></strong></td>
+<td style="text-align: left;"><strong>Instant 1-Click Cash Checkout</strong>: দ্রুত ক্যাশ বিল সম্পন্ন করে।</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong><code>F10</code></strong></td>
+<td style="text-align: left;"><strong>Register Shift Float</strong>: ক্যাশ রেজিস্টার ওপেন/ক্লোজ উইন্ডো খোলে।</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong><code>Esc</code></strong></td>
+<td style="text-align: left;"><strong>Dismiss / Clear</strong>: যেকোনো খোলা মোডাল বা সার্চ বক্স বন্ধ করে।</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h1 id="12-complete-rest-api-reference">12. COMPLETE REST API REFERENCE</h1>
+<h3 id="_11">পূর্ণাঙ্গ এপিআই রেফারেন্স</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">মেথড</th>
+<th style="text-align: left;">এন্ডপয়েন্ট</th>
+<th style="text-align: left;">বিবরণ</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>GET</code></td>
+<td style="text-align: left;"><code>/api/status</code></td>
+<td style="text-align: left;">সিস্টেমের স্বাস্থ্য, শিফট স্ট্যাটাস ও সার্ভার টাইম রিটার্ন করে</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>GET</code></td>
+<td style="text-align: left;"><code>/api/inventory</code></td>
+<td style="text-align: left;">সমস্ত পণ্য, ক্যাটাগরি, বারকোড ও সেলফ লোকেশন লিস্ট</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>POST</code></td>
+<td style="text-align: left;"><code>/api/inventory</code></td>
+<td style="text-align: left;">নতুন পণ্য বা এক্সেসরি যোগ ও বারকোড জেনারেট</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>POST</code></td>
+<td style="text-align: left;"><code>/api/pos/split-checkout</code></td>
+<td style="text-align: left;">ক্যাশ/কার্ড/MFS স্প্লিট সেলস সম্পন্ন ও অটো-জার্নাল পোস্টিং</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>GET</code></td>
+<td style="text-align: left;"><code>/api/accounting/trial-balance</code></td>
+<td style="text-align: left;">ডাবল-এন্ট্রি ট্রায়াল ব্যালেন্স ও ব্যালেন্সড স্ট্যাটাস</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>GET</code></td>
+<td style="text-align: left;"><code>/api/accounting/profit-loss</code></td>
+<td style="text-align: left;">রিয়েল-টাইম রেভিনিউ, COGS, গ্রস প্রফিট ও নেট মার্জিন</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>GET</code></td>
+<td style="text-align: left;"><code>/api/accounting/general-ledger</code></td>
+<td style="text-align: left;">জেনারেল লেজার এন্ট্রি লিস্ট (ফিল্টার সহ)</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>GET</code></td>
+<td style="text-align: left;"><code>/api/accounting/journal</code></td>
+<td style="text-align: left;">জার্নাল ভাউচার (JV) এবং লাইন আইটেম ব্রেকডাউন</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>GET</code></td>
+<td style="text-align: left;"><code>/api/procurement/po</code></td>
+<td style="text-align: left;">পারচেজ অর্ডার (PO) লিস্ট ও স্ট্যাটাস</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>POST</code></td>
+<td style="text-align: left;"><code>/api/procurement/po</code></td>
+<td style="text-align: left;">নতুন ড্রাফট PO তৈরি</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>POST</code></td>
+<td style="text-align: left;"><code>/api/procurement/po/approve</code></td>
+<td style="text-align: left;">PO অনুমোদন (Manager/Owner)</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>POST</code></td>
+<td style="text-align: left;"><code>/api/procurement/po/receive</code></td>
+<td style="text-align: left;"><strong>অ্যাটমিক গুডস রিসিভিং</strong>: স্টক বৃদ্ধি + WAC + AP ক্রেডিট + JV</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>GET</code></td>
+<td style="text-align: left;"><code>/api/procurement/suppliers</code></td>
+<td style="text-align: left;">ভেন্ডর ডিরেক্টরি ও বকেয়া AP ব্যালেন্স</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>POST</code></td>
+<td style="text-align: left;"><code>/api/procurement/suppliers</code></td>
+<td style="text-align: left;">নতুন সরবরাহকারী প্রোফাইল তৈরি</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>GET</code></td>
+<td style="text-align: left;"><code>/api/inventory/coverage-analytics</code></td>
+<td style="text-align: left;">৩০ দিনের সেলস রানওয়ে, কভারেজ ডে ও লো-স্টক সতর্কতা</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>GET</code></td>
+<td style="text-align: left;"><code>/api/inventory/combos</code></td>
+<td style="text-align: left;">কম্বো ও বান্ডেল লিস্ট এবং উপাদানসমূহের বিবরণ</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>POST</code></td>
+<td style="text-align: left;"><code>/api/inventory/combos</code></td>
+<td style="text-align: left;">নতুন কম্বো তৈরি (ডিফেন্সিভ COGS গার্ড সহ)</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>GET</code></td>
+<td style="text-align: left;"><code>/api/inventory/audits</code></td>
+<td style="text-align: left;">স্টক অডিট হিস্টোরি ও শ্রিঙ্কেজ ক্ষতির রেকর্ড</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>POST</code></td>
+<td style="text-align: left;"><code>/api/inventory/audits/reconcile</code></td>
+<td style="text-align: left;">ফিজিক্যাল কাউন্ট গরমিল সমাধান ও P&amp;L এ লস পোস্টিং</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>GET</code></td>
+<td style="text-align: left;"><code>/api/omnichannel/orders</code></td>
+<td style="text-align: left;">ওমনিচ্যানেল অর্ডার কিউ ও সংরক্ষিত স্টক</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>POST</code></td>
+<td style="text-align: left;"><code>/api/omnichannel/orders</code></td>
+<td style="text-align: left;">নতুন ওয়েব/ফোন অর্ডার প্লেসমেন্ট ও স্টক ব্লকিং</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>POST</code></td>
+<td style="text-align: left;"><code>/api/omnichannel/orders/dispatch</code></td>
+<td style="text-align: left;">অর্ডার ডেলিভারিতে পাঠানো</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>POST</code></td>
+<td style="text-align: left;"><code>/api/omnichannel/orders/restock</code></td>
+<td style="text-align: left;">ক্যানসেলড/রিটার্ন অর্ডার পুনরায় ইনভেন্টরিতে রিস্টকিং</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>GET</code></td>
+<td style="text-align: left;"><code>/api/dashboard/executive</code></td>
+<td style="text-align: left;">এক্সিকিউটিভ লিকুইডিটি, পেটি ক্যাশ, ব্যাংক ও ১২ মাসের ট্রেন্ড</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h1 id="13-database-schema-specification">13. DATABASE SCHEMA SPECIFICATION</h1>
+<h3 id="_12">ডাটাবেস স্কিমা স্পেসিফিকেশন</h3>
+<p>সিস্টেমের <code>xpro_store.db</code> ডাটাবেসটিতে নিচের টেবিলগুলো রিলেশনশিপ মেইনটেইন করে সংরক্ষিত থাকে:
+1. <code>inventory</code>: প্রোডাক্ট মাস্টার, বারকোড, ক্যাটাগরি, সেলফ লোকেশন, কস্ট প্রাইস, সেলস প্রাইস, কোয়ান্টিটি, রিরর্ডার পয়েন্ট, কম্বো ফ্ল্যাগ।
+2. <code>chart_of_accounts</code>: ১৭টি একাউন্ট কোড, নাম, টাইপ (Asset, Liability, Equity, Revenue, Expense)।
+3. <code>journal_entries</code>: ভাউচার নম্বর, রেফারেন্স টাইপ, ডেসক্রিপশন, ইউজার, টাইমস্ট্যাম্প।
+4. <code>journal_lines</code>: ভাউচার আইডি, একাউন্ট কোড, ডেবিট সেন্টস, ক্রেডিট সেন্টস।
+5. <code>suppliers</code>: সরবরাহকারীর নাম, কোড, ফোন, পেমেন্ট টার্মস (<code>NET_30</code>), বকেয়া ব্যালেন্স।
+6. <code>purchase_orders</code>: পিও নম্বর, সাপ্লায়ার আইডি, স্ট্যাটাস, মোট খরচ, এক্সপেক্টেড ডেট।
+7. <code>purchase_order_items</code>: পিও আইডি, প্রোডাক্ট আইডি, ইউনিট কস্ট, কোয়ান্টিটি, সাবটোটাল।
+8. <code>goods_receipts</code>: জিআরএন নম্বর, পিও নম্বর, রিসিভ ডেট, রিসিভড বাই ইউজার, জার্নাল এন্ট্রি আইডি।
+9. <code>sales</code>: সেলস রিসিট নম্বর, কাস্টমার নেম, মোট বিল, পেমেন্টস জেএসওন, ডিসকাউন্ট, জার্নাল এন্ট্রি আইডি।
+10. <code>stock_audits</code>: অডিট নম্বর, প্রোডাক্ট আইডি, সিস্টেম স্টক, ফিজিক্যাল কাউন্ট, গরমিল, কারণ, P&amp;L জার্নাল আইডি।
+11. <code>combo_bundles</code>: বান্ডেল নেম, বারকোড, প্রাইস, উপাদানগুলোর জেএসওন (<code>items_json</code>)।
+12. <code>omnichannel_orders</code>: চ্যানেল, কাস্টমার, প্রোডাক্ট আইডি, রিজার্ভড কোয়ান্টিটি, স্ট্যাটাস।
+13. <code>shifts</code>: ক্যাশিয়ার ইউজার, ওপেনিং ফ্লোট, ক্লোজিং ক্যাশ, ডিসকাউন্ট অডিট।</p>
+<hr />
+<h1 id="14-deployment-operations-guide">14. DEPLOYMENT &amp; OPERATIONS GUIDE</h1>
+<h3 id="_13">ডিপ্লয়মেন্ট ও অপারেশন গাইড</h3>
+<h4 id="daily-retail-operation">লোকাল সার্ভার চালনা (Daily Retail Operation):</h4>
+<ol>
+<li>ডিরেক্টরির <a href="file:///l:/My%20Drive/0.DIS%20Project/7.X%20Pro%20Wireless/START_WEB_POS.bat"><code>START_WEB_POS.bat</code></a> ফাইলটিতে ডাবল ক্লিক করুন।</li>
+<li>স্বয়ংক্রিয়ভাবে ব্যাকএন্ড সার্ভার চালু হবে এবং ডিফল্ট ব্রাউজারে <code>http://localhost:8000</code> খুলে যাবে।</li>
+<li>লোকাল নেটওয়ার্কের যেকোনো ট্যাবলেট বা কম্পিউটার থেকে একই ওয়াইফাই এর মাধ্যমে আইপি (যেমন: <code>http://192.168.1.X:8000</code>) দিয়ে ব্যবহার করা যাবে।</li>
+</ol>
+<h4 id="_14">গিটহাব ও ক্লাউড ডিপ্লয়মেন্ট প্রস্তুতি:</h4>
+<ul>
+<li>সিস্টেমের স্ট্যাটিক ফ্রন্টএন্ড এবং ব্যাকএন্ড এপিআই সম্পূর্ণভাবে মডুলার হওয়ায় এটি যেকোনো গিটহাব রিপোজিটরিতে সংরক্ষণ এবং Vercel / Render / Cloud সার্ভারে হোস্ট করার জন্য শতভাগ প্রস্তুত।</li>
+</ul>
+</div>
+
+</body>
+</html>
