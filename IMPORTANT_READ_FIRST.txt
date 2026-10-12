@@ -1,0 +1,7 @@
+XPRO STORE POS - DEVELOPMENT BUILD V0.2
+Run START_XPRO.bat on Windows with Python 3.10+.
+First launch creates the administrator account.
+Includes cash-only/card-record sales, inventory receiving, repair tickets, shift cash counts, notes, receipt HTML, store-credit returns, internal money transfer and NY LOTTO ledgers, audit events, and policy print layouts.
+Office/duplex thermal modes create a receipt page then a policies page. In your browser print dialog select duplex/flip on long edge and verify the printer supports it. Single-sided thermal creates front-only receipt.
+This build does NOT silently send print jobs to printers, detect physical duplex support, process real payments, perform money transfers or lottery sales, open cash drawers, or enforce all legal requirements. Do not treat it as production-ready without checking local operation and your provider requirements.
+For a standalone EXE on a Windows computer run BUILD_WINDOWS_EXE.bat. Store data lives beside the EXE/script in xpro_store.db. Back up that database regularly. Do not put the application under Program Files without changing the database location to a writable directory.

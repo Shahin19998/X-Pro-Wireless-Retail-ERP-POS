@@ -1,0 +1,22 @@
+﻿# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+env/
+venv/
+
+# Large media files
+*.mp4
+
+# SQLite transient WAL files
+*.db-wal
+*.db-shm
+
+# System files
+Thumbs.db
+.DS_Store
+
+# Vercel & IDE
+.vercel
+.gemini

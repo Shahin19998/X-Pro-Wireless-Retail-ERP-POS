@@ -1,0 +1,2130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>X Pro Wireless &amp; Repair — POS, Barcode &amp; Retail Management Suite</title>
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#FF6A00">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body class="dark-theme">
+
+  <!-- Top Announcement / Shift Alert Bar -->
+  <div id="shiftBanner" class="shift-banner">
+    <div class="banner-content">
+      <span class="pulse-dot"></span>
+      <span id="bannerShiftText">Register Active • Change: $50.00</span>
+    </div>
+    <div class="banner-actions">
+      <!-- In-app Quick Role Switcher (Super Admin / Manager / Receiving / POS Executive) -->
+      <div class="header-role-switcher" id="headerRoleSwitcher">
+        <span class="role-switch-label">Role Access:</span>
+        <button class="role-pill-btn active" data-switch-role="superadmin" title="Super Admin / Owner: Full Enterprise Access">👑 Super Admin</button>
+        <button class="role-pill-btn" data-switch-role="manager" title="Branch Manager: Operations & Approvals">👔 Manager</button>
+        <button class="role-pill-btn" data-switch-role="receiving" title="Receiving Staff: Procurement & Stock Audit">📥 Receiving</button>
+        <button class="role-pill-btn" data-switch-role="pos_exec" title="POS Executive: Fast-Billing, Barcodes & Sales">💳 POS Exec</button>
+      </div>
+
+      <!-- Sync Status & Hotkeys Badge -->
+      <div class="header-sync-box" id="headerSyncBox">
+        <span class="sync-pill" id="syncStatusPill" title="Offline-first IndexedDB Sync">🟢 Online</span>
+        <button id="btnManualSync" class="btn-ghost-sm" title="Synchronize local offline orders">🔄 Sync</button>
+        <button id="btnOpenHotkeysModal" class="btn-ghost-sm" title="Keyboard Shortcuts Cheat Sheet">⌨️ Keys [F1]</button>
+      </div>
+
+      <button id="btnSeedDemo" class="btn-ghost-sm" title="Add realistic accessories & demo tickets">✨ Demo Data</button>
+      <button id="btnToggleTheme" class="btn-ghost-sm">🌓 Theme</button>
+    </div>
+  </div>
+
+  <div class="app-layout">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar" id="sidebar">
+      <div class="brand">
+        <img src="/logo.png" alt="X Pro Wireless &amp; Repair" class="brand-logo-img">
+        <div class="brand-info">
+          <h1>X Pro <span class="accent">Wireless</span> &amp; Repair</h1>
+          <span class="badge-version">ERP v1.0 Enterprise</span>
+        </div>
+      </div>
+
+      <nav class="nav-menu">
+        <div class="nav-section-label">POS OPERATIONS</div>
+        <button class="nav-item active" data-tab="checkout">
+          <span class="nav-icon">🛒</span>
+          <span class="nav-label">Checkout / Fast Sale</span>
+        </button>
+        <button class="nav-item" data-tab="barcodes">
+          <span class="nav-icon">🏷️</span>
+          <span class="nav-label">Barcode &amp; Labels</span>
+          <span class="nav-badge new-badge">Studio</span>
+        </button>
+        <button class="nav-item" data-tab="inventory">
+          <span class="nav-icon">📦</span>
+          <span class="nav-label">Stock &amp; Placement</span>
+          <span id="badgeInvCount" class="nav-badge">0</span>
+        </button>
+        <button class="nav-item" data-tab="history">
+          <span class="nav-icon">🧾</span>
+          <span class="nav-label">Sales &amp; Receipts</span>
+        </button>
+
+        <div class="nav-section-label">ENTERPRISE ERP</div>
+        <button class="nav-item" data-tab="reports">
+          <span class="nav-icon">📊</span>
+          <span class="nav-label">Executive ERP &amp; Analytics</span>
+        </button>
+        <button class="nav-item" data-tab="procurement" id="navTabProcurement">
+          <span class="nav-icon">📥</span>
+          <span class="nav-label">Procurement &amp; POs</span>
+          <span class="nav-badge" id="badgePoCount">0</span>
+        </button>
+        <button class="nav-item" data-tab="accounting" id="navTabAccounting">
+          <span class="nav-icon">📑</span>
+          <span class="nav-label">Double-Entry Accounting</span>
+          <span class="nav-lock-badge" id="lockBadgeAccounting">Admin</span>
+        </button>
+        <button class="nav-item" data-tab="audit_stock" id="navTabAuditStock">
+          <span class="nav-icon">🔍</span>
+          <span class="nav-label">Stock Audit &amp; Shrinkage</span>
+        </button>
+        <button class="nav-item" data-tab="combos" id="navTabCombos">
+          <span class="nav-icon">🎁</span>
+          <span class="nav-label">Combos &amp; Bundles</span>
+        </button>
+        <button class="nav-item" data-tab="omnichannel" id="navTabOmnichannel">
+          <span class="nav-icon">🌐</span>
+          <span class="nav-label">Omnichannel Orders</span>
+        </button>
+
+        <div class="nav-section-label">SERVICES &amp; GOVERNANCE</div>
+        <button class="nav-item" data-tab="customers">
+          <span class="nav-icon">👥</span>
+          <span class="nav-label">Customer CRM &amp; Loyalty</span>
+        </button>
+        <button class="nav-item" data-tab="repairs">
+          <span class="nav-icon">🔧</span>
+          <span class="nav-label">Device Repairs</span>
+          <span id="badgeRepairCount" class="nav-badge alert">0</span>
+        </button>
+        <button class="nav-item" data-tab="ledger" id="navTabLedger">
+          <span class="nav-icon">💸</span>
+          <span class="nav-label">Transfer &amp; Lotto</span>
+          <span class="nav-lock-badge" id="lockBadgeLedger">Manager</span>
+        </button>
+        <button class="nav-item" data-tab="notes">
+          <span class="nav-icon">📝</span>
+          <span class="nav-label">Shift Notes</span>
+        </button>
+        <button class="nav-item" data-tab="policies" id="navTabPolicies">
+          <span class="nav-icon">📜</span>
+          <span class="nav-label">Policies &amp; Audit</span>
+          <span class="nav-lock-badge" id="lockBadgePolicies">Admin</span>
+        </button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="user-card" id="userCard">
+          <div class="user-avatar" id="userAvatar">A</div>
+          <div class="user-details">
+            <div class="user-name" id="currentUsername">Admin</div>
+            <div class="user-role" id="currentUserRole">Administrator</div>
+          </div>
+        </div>
+        <div class="shift-control-panel">
+          <button id="btnOpenShiftModal" class="btn-primary-outline w-100">💰 Manage Shift</button>
+          <button id="btnLogout" class="btn-danger-ghost w-100">🔒 Lock / Sign Out</button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-viewport">
+      
+      <!-- ================= TAB 1: CHECKOUT ================= -->
+      <section id="tab-checkout" class="view-panel active">
+        <div class="pos-workspace">
+          
+          <!-- Catalog & Custom Item -->
+          <div class="pos-catalog-column">
+
+            <!-- Held Carts Swap Bar (Multi-Cart Hold & Switch / Cart Swapping) -->
+            <div class="held-carts-bar" id="heldCartsBar">
+              <button type="button" class="held-cart-pill active" id="btnActiveCartPill">🛒 Active Cart</button>
+              <div id="heldCartsList" class="held-carts-list">
+                <!-- Dynamically populated held carts -->
+              </div>
+              <button type="button" class="btn-ghost-sm" id="btnHoldCurrentCart" title="Hold Current Customer Cart (F3)" style="margin-left:auto;">
+                ⏸️ Hold Cart [F3]
+              </button>
+            </div>
+
+            <!-- Active Barcode Scanner Gun Bar -->
+            <div class="pos-barcode-scanner-bar">
+              <div class="scanner-input-wrap">
+                <span class="scanner-laser-icon">⚡</span>
+                <input type="text" id="posBarcodeScanInput" placeholder="Scan Barcode / SKU with scanner gun (or type barcode and press Enter)..." autofocus autocomplete="off">
+                <span class="scanner-badge-status">SCANNER READY [F2]</span>
+              </div>
+              <button id="btnManualBarcodeScan" class="btn-scanner-submit">➕ Scan</button>
+            </div>
+
+            <!-- Search & Filter Header -->
+            <div class="catalog-header">
+              <div class="search-input-wrapper">
+                <span class="search-icon">🔍</span>
+                <input type="text" id="catalogSearch" placeholder="Search accessories, cases, screen protectors, SIMs..." autocomplete="off">
+              </div>
+              <button id="btnQuickCustomSale" class="btn-secondary">➕ Custom Item</button>
+            </div>
+
+            <!-- Category Pills -->
+            <div class="category-pills" id="categoryPills">
+              <button class="pill active" data-cat="ALL">All Items</button>
+              <button class="pill" data-cat="Merchandise">Accessories</button>
+              <button class="pill" data-cat="Repair">Repair Parts</button>
+              <button class="pill" data-cat="Prepaid / SIM">Prepaid / SIM</button>
+              <button class="pill" data-cat="Unlocking">Phone Unlock</button>
+              <button class="pill" data-cat="NY LOTTO">NY LOTTO</button>
+              <button class="pill" data-cat="Other">Other</button>
+            </div>
+
+            <!-- Product Cards Grid -->
+            <div class="catalog-grid" id="catalogGrid">
+              <!-- Dynamically rendered -->
+            </div>
+          </div>
+
+          <!-- Checkout & Cart Sidebar -->
+          <div class="pos-cart-column">
+            <div class="cart-card">
+              <div class="cart-header">
+                <h2>Current Order</h2>
+                <button id="btnClearCart" class="btn-clear-cart" title="Clear Cart">Clear</button>
+              </div>
+
+              <!-- Customer info & CRM Lookup -->
+              <div class="customer-input-row">
+                <input type="text" id="cartCustomer" list="customerDatalist" placeholder="Customer Name or Phone (attach to CRM)...">
+                <datalist id="customerDatalist"></datalist>
+              </div>
+
+              <!-- Cart Items List -->
+              <div class="cart-items-list" id="cartItemsList">
+                <div class="empty-cart-state">
+                  <div class="empty-icon">🛒</div>
+                  <p>Order is empty</p>
+                  <small>Scan barcode or click items to add</small>
+                </div>
+              </div>
+
+              <!-- Coupon Code & Loyalty Points Bar -->
+              <div style="background:var(--bg-input); padding:8px 10px; border-radius:var(--radius-md); border:1px solid var(--border-color); margin-bottom:8px;">
+                <div style="display:flex; gap:6px; margin-bottom:6px;">
+                  <input type="text" id="cartCouponCode" placeholder="PROMO / COUPON" style="font-size:0.78rem; padding:5px 8px; text-transform:uppercase; font-family:var(--font-mono); font-weight:700;">
+                  <button type="button" id="btnApplyCoupon" class="btn-secondary-sm" style="padding:5px 10px; font-size:0.75rem;">Apply</button>
+                </div>
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                  <span style="font-size:0.75rem; color:var(--accent-amber);" id="cartLoyaltyPtsText">⭐ Loyalty Points: 0</span>
+                  <button type="button" id="btnRedeemPoints" class="btn-table-action" style="font-size:0.7rem; padding:2px 8px;">Redeem 10 Pts ($1 Off)</button>
+                </div>
+              </div>
+
+              <!-- Pricing Calculation -->
+              <div class="cart-totals">
+                <div class="calc-row">
+                  <span>Subtotal</span>
+                  <span id="cartSubtotal">$0.00</span>
+                </div>
+                <div class="calc-row" id="cartDiscountRow" style="display:none; color:var(--accent-emerald);">
+                  <span>Discount (Coupon / Loyalty)</span>
+                  <span id="cartDiscount">-$0.00</span>
+                </div>
+                <div class="calc-row">
+                  <span>Tax (0% Standard Retail)</span>
+                  <span id="cartTax">$0.00</span>
+                </div>
+                <div class="calc-row total-row">
+                  <span>Total Amount</span>
+                  <span id="cartGrandTotal">$0.00</span>
+                </div>
+              </div>
+
+              <!-- Payment Method Selector -->
+              <div class="payment-method-selector">
+                <label>Payment Method:</label>
+                <div class="pay-buttons">
+                  <button class="pay-btn active" data-pay="Cash">💵 Cash</button>
+                  <button class="pay-btn" data-pay="Card">💳 Card</button>
+                  <button class="pay-btn" data-pay="Other">🔄 Other</button>
+                </div>
+              </div>
+
+              <!-- Cash Tendered Quick Row -->
+              <div id="cashTenderedGroup" class="cash-calc-box">
+                <div class="cash-presets">
+                  <button class="preset-btn" data-amt="exact">Exact</button>
+                  <button class="preset-btn" data-amt="2000">$20</button>
+                  <button class="preset-btn" data-amt="5000">$50</button>
+                  <button class="preset-btn" data-amt="10000">$100</button>
+                </div>
+                <div class="tendered-row">
+                  <span>Tendered:</span>
+                  <input type="number" id="cashTenderedInput" placeholder="0.00" step="0.01">
+                </div>
+                <div class="change-due-row">
+                  <span>Change Due:</span>
+                  <strong id="changeDueAmount" class="change-amount">$0.00</strong>
+                </div>
+              </div>
+
+              <!-- Checkout Submit & Split Actions -->
+              <div style="display:flex; gap:8px; margin-top:10px;">
+                <button type="button" id="btnOpenSplitModal" class="btn-secondary" style="flex:1; padding:11px; font-size:0.85rem;" title="Split across Cash, Card & MFS (F8)">
+                  💳 Split [F8]
+                </button>
+                <button type="button" id="btnCompleteSale" class="btn-checkout" style="flex:2; margin-top:0;" title="Fast Cash / Card Checkout (F9)">
+                  ⚡ Pay &amp; Print [F9]
+                </button>
+              </div>
+              <div class="register-note">
+                <small>🔒 Auto-deducts inventory, records points &amp; double-entry journal</small>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ================= TAB 2: BARCODE & LABEL STUDIO ================= -->
+      <section id="tab-barcodes" class="view-panel">
+        <div class="panel-header">
+          <div>
+            <h2>🏷️ Barcode Generator &amp; Sticker Printing Studio</h2>
+            <p>One-stop hub: Add products, auto-generate Code128 barcodes, preview live sticker sheets, and print labels immediately.</p>
+          </div>
+          <button id="btnPrintBarcodeLabelsBtn" class="btn-primary" style="font-size:0.95rem; padding:11px 22px;">🖨️ Print Label Stickers</button>
+        </div>
+
+        <!-- Top Studio Grid: Left = Add & Options, Right = Live Preview -->
+        <div class="barcode-studio-hero-grid">
+          
+          <!-- Left Column: Add Product & Barcode Controls -->
+          <div class="barcode-form-card">
+            
+            <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(255,255,255,0.08); padding-bottom:12px;">
+              <h3 style="margin:0; font-size:1.05rem; color:#fff; display:flex; align-items:center; gap:8px;">
+                <span>⚡ 1-Step: Add Product or Select Existing</span>
+              </h3>
+              <span class="badge" style="background:var(--accent-orange-soft); color:var(--accent-primary); font-weight:800; font-size:0.7rem; padding:3px 8px; border-radius:var(--radius-full); border:1px solid rgba(255,106,0,0.3);">CODE 128 AUTO</span>
+            </div>
+
+            <!-- Existing product selector -->
+            <div class="form-group">
+              <label style="color:var(--accent-primary); display:flex; justify-content:space-between;">
+                <span>📦 Select From Store Inventory:</span>
+                <small style="color:var(--text-muted); cursor:pointer;" onclick="document.getElementById('studioProdName').focus()">Or Add New Below ↓</small>
+              </label>
+              <select id="barcodeSelectProduct" style="border-color:rgba(255,106,0,0.4);">
+                <!-- Dynamically populated -->
+              </select>
+            </div>
+
+            <div class="divider-with-text" style="margin:2px 0;">
+              <span>OR QUICK ADD NEW ACCESSORY</span>
+            </div>
+
+            <!-- Quick Add Form -->
+            <div class="form-group">
+              <label>Product / Accessory Name</label>
+              <input type="text" id="studioProdName" placeholder="e.g. iPhone 15 Pro Max Privacy Glass">
+            </div>
+
+            <div class="form-row">
+              <div class="form-group flex-1">
+                <label>Category</label>
+                <select id="studioProdCat">
+                  <option value="Merchandise">Accessories / Cases</option>
+                  <option value="Repair">Screen Glass / Parts</option>
+                  <option value="Prepaid / SIM">Prepaid / SIM</option>
+                  <option value="Unlocking">Phone Unlock</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+              <div class="form-group flex-1">
+                <label>Store Placement / Shelf</label>
+                <input type="text" id="barcodeShelfLocation" placeholder="Rack A-1 (Cases)" value="Rack A-1 (Cases)">
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group flex-1">
+                <label>Retail Selling Price ($)</label>
+                <input type="text" id="barcodePriceDisplay" placeholder="19.99" value="$19.99">
+              </div>
+              <div class="form-group flex-1">
+                <label>Cost of Goods ($)</label>
+                <input type="number" id="studioProdCost" placeholder="6.50" step="0.01" value="6.50">
+              </div>
+              <div class="form-group flex-1">
+                <label>Stock Qty</label>
+                <input type="number" id="studioProdQty" placeholder="15" value="15" min="1">
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group flex-1">
+                <label>Barcode Number (Code128)</label>
+                <div class="input-with-action">
+                  <input type="text" id="barcodeInputCode" placeholder="XP89000001" style="font-family:var(--font-mono); font-weight:700;">
+                  <button type="button" id="btnRegenerateBarcode" class="btn-secondary-sm" title="Generate New Unique Barcode">✨ New Code</button>
+                </div>
+              </div>
+              <div class="form-group flex-1">
+                <label>Internal SKU (Optional)</label>
+                <input type="text" id="studioProdSku" placeholder="GLS-15PM" style="font-family:var(--font-mono);">
+              </div>
+            </div>
+
+            <!-- Action button -->
+            <button type="button" id="btnStudioSaveAndGenerate" class="btn-primary w-100" style="padding:12px; font-size:0.95rem;">
+              <span>⚡ Save Product &amp; Generate Barcode Labels</span>
+            </button>
+
+            <!-- Print formatting bar -->
+            <div style="background:var(--bg-input); padding:12px; border-radius:var(--radius-md); border:1px solid var(--border-color); display:flex; flex-direction:column; gap:10px;">
+              <div class="form-row" style="align-items:center;">
+                <div class="form-group flex-1">
+                  <label style="font-size:0.75rem;">Print Sheet Format:</label>
+                  <select id="barcodeLabelFormat">
+                    <option value="thermal-single">Thermal Roll Sticker (50mm x 30mm) — Single Roll</option>
+                    <option value="sheet-24" selected>Standard A4 Sheet (24 Stickers - 3x8 Grid)</option>
+                    <option value="compact">Compact Tag (35mm x 20mm)</option>
+                  </select>
+                </div>
+                <div class="form-group" style="width:110px;">
+                  <label style="font-size:0.75rem;">Label Count:</label>
+                  <input type="number" id="barcodeLabelQty" value="8" min="1" max="100">
+                </div>
+              </div>
+              <!-- Quick count pills -->
+              <div style="display:flex; gap:6px; align-items:center; flex-wrap:wrap;">
+                <span style="font-size:0.72rem; color:var(--text-muted);">Presets:</span>
+                <button type="button" class="btn-table-action" onclick="document.getElementById('barcodeLabelQty').value=1; document.getElementById('barcodeLabelQty').dispatchEvent(new Event('input'))">1 Single</button>
+                <button type="button" class="btn-table-action" onclick="document.getElementById('barcodeLabelQty').value=4; document.getElementById('barcodeLabelQty').dispatchEvent(new Event('input'))">4 Labels</button>
+                <button type="button" class="btn-table-action" onclick="document.getElementById('barcodeLabelQty').value=8; document.getElementById('barcodeLabelQty').dispatchEvent(new Event('input'))">8 Labels</button>
+                <button type="button" class="btn-table-action" onclick="document.getElementById('barcodeLabelQty').value=24; document.getElementById('barcodeLabelQty').dispatchEvent(new Event('input'))">24 (Full A4)</button>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Right Column: Live Sticker Preview Sheet -->
+          <div class="barcode-preview-card">
+            <div class="preview-header" style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(255,255,255,0.08); padding-bottom:12px;">
+              <div>
+                <h3 style="margin:0; font-size:1.1rem; color:#fff;">🏷️ Live Physical Sticker Preview</h3>
+                <small style="color:var(--text-muted);">Formatted for thermal sticker roll &amp; A4 sticker sheets</small>
+              </div>
+              <span class="preview-badge" id="previewLabelCountBadge" style="background:var(--accent-orange-soft); color:var(--accent-primary); border:1px solid rgba(255,106,0,0.3); font-weight:800; padding:4px 10px; border-radius:var(--radius-full);">8 Labels</span>
+            </div>
+            
+            <div class="sticker-sheet-container" id="stickerSheetPreview">
+              <!-- Rendered dynamically -->
+            </div>
+
+            <div style="display:flex; justify-content:space-between; align-items:center; padding-top:10px; border-top:1px solid rgba(255,255,255,0.06);">
+              <span style="font-size:0.8rem; color:var(--text-secondary);">💡 Tip: Click <strong>Print Label Stickers</strong> above or Ctrl+P to print.</span>
+              <button type="button" class="btn-primary" onclick="document.getElementById('btnPrintBarcodeLabelsBtn').click()">🖨️ Quick Print</button>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Bottom Section: All Store Accessories & Barcode Table -->
+        <div class="barcode-directory-card" style="margin-top:20px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; flex-wrap:wrap; gap:10px;">
+            <div>
+              <h3 style="font-size:1.15rem; color:#fff; font-weight:800; margin-bottom:2px;">📦 Store Barcode Registry &amp; Instant Label Launcher</h3>
+              <p style="font-size:0.82rem; color:var(--text-secondary); margin:0;">Click "Load to Print" on any item to instantly generate its sticker labels above.</p>
+            </div>
+            <div class="search-input-wrapper w-300">
+              <span class="search-icon">🔍</span>
+              <input type="text" id="barcodeTableSearch" placeholder="Search product, barcode, or rack...">
+            </div>
+          </div>
+
+          <div class="table-container">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Accessory Name &amp; SKU</th>
+                  <th>Barcode (Code128)</th>
+                  <th>Store Placement</th>
+                  <th>Selling Price</th>
+                  <th>Stock Units</th>
+                  <th>Print Action</th>
+                </tr>
+              </thead>
+              <tbody id="barcodeRegistryTableBody">
+                <!-- Dynamically populated via JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ================= TAB 3: INVENTORY & PLACEMENT ================= -->
+      <section id="tab-inventory" class="view-panel">
+        <div class="panel-header">
+          <div>
+            <h2>Inventory & Store Placement</h2>
+            <p>Track retail accessories, repair parts, barcodes, and physical shelf locations.</p>
+          </div>
+          <div style="display:flex; gap:10px;">
+            <button id="btnOpenAddProductModal" class="btn-primary">➕ Add / Receive Accessory</button>
+          </div>
+        </div>
+
+        <div class="kpi-grid">
+          <div class="kpi-card">
+            <span class="kpi-title">Total SKUs</span>
+            <span class="kpi-value" id="kpiTotalSkus">0</span>
+          </div>
+          <div class="kpi-card">
+            <span class="kpi-title">Total Units in Stock</span>
+            <span class="kpi-value" id="kpiTotalUnits">0</span>
+          </div>
+          <div class="kpi-card">
+            <span class="kpi-title">Low Stock Alerts (&le;5)</span>
+            <span class="kpi-value warning" id="kpiLowStock">0</span>
+          </div>
+          <div class="kpi-card">
+            <span class="kpi-title">Retail Valuation</span>
+            <span class="kpi-value accent" id="kpiValuation">$0.00</span>
+          </div>
+        </div>
+
+        <!-- Shelf Filter Bar -->
+        <div class="shelf-filter-bar">
+          <span class="filter-label">📍 Filter by Store Shelf / Rack:</span>
+          <select id="filterShelfSelect">
+            <option value="ALL">All Store Locations</option>
+          </select>
+          <div class="search-input-wrapper w-300">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="inventoryTableSearch" placeholder="Filter by product, SKU, or barcode...">
+          </div>
+        </div>
+
+        <div class="table-container">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Accessory Name</th>
+                <th>Barcode</th>
+                <th>Shelf Placement</th>
+                <th>Category</th>
+                <th>Cost</th>
+                <th>Price</th>
+                <th>Units</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="inventoryTableBody">
+              <!-- Populated via JS -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ================= TAB 4: SALES & PROFIT REPORTS ================= -->
+      <section id="tab-reports" class="view-panel">
+        <div class="panel-header">
+          <div>
+            <h2>Sales Analytics, Profit & Store Reports</h2>
+            <p>Real-time daily sales, weekly trends, cost of goods, and gross profit margins.</p>
+          </div>
+          <div class="report-tab-pills">
+            <button class="pill active" data-report-view="daily">📅 Daily Report</button>
+            <button class="pill" data-report-view="weekly">📈 Weekly Trend (7-Days)</button>
+            <button class="pill" data-report-view="monthly">🗓️ Monthly Report (30-Days)</button>
+            <button class="pill" data-report-view="placement">📍 Store Placement Report</button>
+            <button class="pill" data-report-view="executive">👑 Executive ERP Liquidity (12M)</button>
+          </div>
+        </div>
+
+        <!-- KPI Grid for Reports -->
+        <div class="kpi-grid">
+          <div class="kpi-card">
+            <span class="kpi-title">Gross Revenue (Today)</span>
+            <span class="kpi-value" id="repKpiRevenue">$0.00</span>
+          </div>
+          <div class="kpi-card">
+            <span class="kpi-title">Cost of Goods Sold (COGS)</span>
+            <span class="kpi-value warning" id="repKpiCost">$0.00</span>
+          </div>
+          <div class="kpi-card">
+            <span class="kpi-title">Net Gross Profit</span>
+            <span class="kpi-value accent" id="repKpiProfit">$0.00</span>
+          </div>
+          <div class="kpi-card">
+            <span class="kpi-title">Profit Margin %</span>
+            <span class="kpi-value" id="repKpiMargin">0.0%</span>
+          </div>
+          <div class="kpi-card">
+            <span class="kpi-title">Completed Orders</span>
+            <span class="kpi-value" id="repKpiOrders">0</span>
+          </div>
+        </div>
+
+        <!-- Dynamic Report Sections -->
+        <div id="reportDailyView" class="report-section active">
+          <div class="report-split-grid">
+            <div class="report-card">
+              <h3>Payment Method Breakdown (Today)</h3>
+              <div id="repPaymentBreakdown" class="payment-bars-container">
+                <!-- Populated via JS -->
+              </div>
+            </div>
+            <div class="report-card">
+              <h3>Top Selling Accessories & Fast Movers</h3>
+              <div class="table-container">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>Product</th>
+                      <th>Placement</th>
+                      <th>Price</th>
+                      <th>Units Left</th>
+                    </tr>
+                  </thead>
+                  <tbody id="repTopItemsTable">
+                    <!-- Populated via JS -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="reportWeeklyView" class="report-section">
+          <div class="report-card">
+            <h3>7-Day Sales & Profit Performance Trend</h3>
+            <div class="table-container">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Day / Date</th>
+                    <th>Transactions</th>
+                    <th>Gross Revenue</th>
+                    <th>Gross Profit</th>
+                    <th>Performance</th>
+                  </tr>
+                </thead>
+                <tbody id="repWeeklyTable">
+                  <!-- Populated via JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div id="reportMonthlyView" class="report-section">
+          <div class="report-card">
+            <h3>🗓️ Current Month Cumulative Performance &amp; Profit</h3>
+            <div class="kpi-grid" style="margin-bottom:14px;">
+              <div class="kpi-card">
+                <span class="kpi-title">Month Gross Revenue</span>
+                <span class="kpi-value" id="repMonthRevenue">$0.00</span>
+              </div>
+              <div class="kpi-card">
+                <span class="kpi-title">Month Total COGS Cost</span>
+                <span class="kpi-value warning" id="repMonthCost">$0.00</span>
+              </div>
+              <div class="kpi-card">
+                <span class="kpi-title">Month Net Gross Profit</span>
+                <span class="kpi-value accent" id="repMonthProfit">$0.00</span>
+              </div>
+              <div class="kpi-card">
+                <span class="kpi-title">Month Gross Margin</span>
+                <span class="kpi-value" id="repMonthMargin">0.0%</span>
+              </div>
+              <div class="kpi-card">
+                <span class="kpi-title">Month Total Sales</span>
+                <span class="kpi-value" id="repMonthOrders">0</span>
+              </div>
+            </div>
+            <div class="alert-box-warning" style="background:rgba(255,106,0,0.1); border-color:rgba(255,106,0,0.3); color:#FF6A00;">
+              📊 <strong>Monthly Overview:</strong> Live cumulative sales totals from SQLite WAL database for the current billing cycle.
+            </div>
+          </div>
+        </div>
+
+        <div id="reportPlacementView" class="report-section">
+          <div class="report-card">
+            <h3>Store Shelf & Rack Placement Valuation</h3>
+            <div class="table-container">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Physical Location</th>
+                    <th>SKU Count</th>
+                    <th>Total Units</th>
+                    <th>Estimated Retail Value</th>
+                  </tr>
+                </thead>
+                <tbody id="repPlacementTable">
+                  <!-- Populated via JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div id="reportExecutiveView" class="report-section">
+          <div class="report-card" style="margin-bottom:16px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; margin-bottom:12px;">
+              <div>
+                <h3 style="margin-bottom:2px;">🏛️ Executive Liquidity, Cash Reserves & Asset Valuation</h3>
+                <p style="font-size:0.82rem; color:var(--text-secondary); margin:0;">Real-time balance sheet asset holdings & current working capital from General Ledger.</p>
+              </div>
+              <button class="btn-secondary-sm" onclick="loadExecutiveAnalytics()">🔄 Refresh Ledger Balances</button>
+            </div>
+
+            <div class="kpi-grid">
+              <div class="kpi-card">
+                <span class="kpi-title">💵 Register Petty Cash</span>
+                <span class="kpi-value accent" id="execKpiPettyCash">$0.00</span>
+              </div>
+              <div class="kpi-card">
+                <span class="kpi-title">🏦 Chase Bank Operating</span>
+                <span class="kpi-value" id="execKpiBank">$0.00</span>
+              </div>
+              <div class="kpi-card">
+                <span class="kpi-title">📱 MFS Wallet (bKash/Nagad)</span>
+                <span class="kpi-value" id="execKpiMfs">$0.00</span>
+              </div>
+              <div class="kpi-card">
+                <span class="kpi-title">📦 Total Inventory Valuation</span>
+                <span class="kpi-value" id="execKpiInventory">$0.00</span>
+              </div>
+              <div class="kpi-card">
+                <span class="kpi-title">📥 Accounts Receivable</span>
+                <span class="kpi-value" id="execKpiReceivable">$0.00</span>
+              </div>
+              <div class="kpi-card">
+                <span class="kpi-title">📤 Accounts Payable (Vendors)</span>
+                <span class="kpi-value warning" id="execKpiPayable">$0.00</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="report-split-grid" style="margin-bottom:16px;">
+            <div class="report-card">
+              <h3>🛒 Basket Size & Footfall Metrics</h3>
+              <div class="kpi-grid" style="grid-template-columns: repeat(2, 1fr); margin-top:10px;">
+                <div class="kpi-card">
+                  <span class="kpi-title">Avg Basket Size (Items/Order)</span>
+                  <span class="kpi-value accent" id="execAvgBasket">2.4 items</span>
+                </div>
+                <div class="kpi-card">
+                  <span class="kpi-title">Avg Ticket Value</span>
+                  <span class="kpi-value" id="execAvgTicket">$36.50</span>
+                </div>
+                <div class="kpi-card">
+                  <span class="kpi-title">Store Footfall (Est. Visitors)</span>
+                  <span class="kpi-value" id="execFootfall">142 today</span>
+                </div>
+                <div class="kpi-card">
+                  <span class="kpi-title">Conversion Rate</span>
+                  <span class="kpi-value" id="execConversion">68.4%</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="report-card">
+              <h3>🛡️ Working Capital & Quick Ratio</h3>
+              <div style="padding:14px; background:rgba(255,255,255,0.03); border-radius:10px; border:1px solid var(--border-color); margin-top:10px;">
+                <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
+                  <span style="color:var(--text-secondary);">Liquid Working Capital:</span>
+                  <strong id="execLiquidCapital" style="color:var(--accent);">$0.00</strong>
+                </div>
+                <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
+                  <span style="color:var(--text-secondary);">Current Ratio (Assets / Liabilities):</span>
+                  <strong id="execCurrentRatio" style="color:#00e676;">Healthy (>2.5x)</strong>
+                </div>
+                <div style="display:flex; justify-content:space-between;">
+                  <span style="color:var(--text-secondary);">Unpaid Vendor Invoices Due:</span>
+                  <strong id="execVendorInvoicesDue" style="color:var(--accent-warm);">0 Pending</strong>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="report-card">
+            <h3>📈 12-Month Trailing Purchase vs. Sales vs. Expense Trend</h3>
+            <div class="table-container">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Billing Cycle</th>
+                    <th>Vendor Purchases (GRN)</th>
+                    <th>Gross Sales Revenue</th>
+                    <th>Operating Expenses</th>
+                    <th>Net Store Profit</th>
+                    <th>Margin %</th>
+                  </tr>
+                </thead>
+                <tbody id="exec12MonthTableBody">
+                  <!-- Injected via JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ================= TAB 5: CUSTOMER CRM ================= -->
+      <section id="tab-customers" class="view-panel">
+        <div class="panel-header">
+          <div>
+            <h2>Customer CRM & Purchase History</h2>
+            <p>Manage customer profiles, contact numbers, order frequency, and VIP loyalty.</p>
+          </div>
+          <button id="btnOpenNewCustomerModal" class="btn-primary">➕ Add Customer</button>
+        </div>
+
+        <div class="table-container">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Customer Name</th>
+                <th>Phone Number</th>
+                <th>Email</th>
+                <th>Total Spend</th>
+                <th>Total Orders</th>
+                <th>Customer Notes</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="customersTableBody">
+              <!-- Populated via JS -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ================= TAB 6: REPAIRS ================= -->
+      <section id="tab-repairs" class="view-panel">
+        <div class="panel-header">
+          <div>
+            <h2>Device Repairs Work Orders</h2>
+            <p>Track customer phones, repair statuses, and 10-day pickup deadlines.</p>
+          </div>
+          <button id="btnOpenNewRepairModal" class="btn-primary">🛠️ New Repair Ticket</button>
+        </div>
+
+        <div class="repairs-filter-bar">
+          <button class="pill active" data-repair-filter="ALL">All Tickets</button>
+          <button class="pill" data-repair-filter="IN PROGRESS">In Progress</button>
+          <button class="pill" data-repair-filter="READY">Ready For Pickup</button>
+          <button class="pill" data-repair-filter="OVERDUE">⚠️ Overdue (>10 Days)</button>
+        </div>
+
+        <div class="repairs-grid" id="repairsGrid">
+          <!-- Populated via JS -->
+        </div>
+      </section>
+
+      <!-- ================= TAB 7: MONEY TRANSFER & LOTTO ================= -->
+      <section id="tab-ledger" class="view-panel">
+        <div class="panel-header">
+          <div>
+            <h2>Money Transfer & NY LOTTO Service Ledger</h2>
+            <p>Separate movement of cash, customer fees, and retail commissions.</p>
+          </div>
+          <button id="btnOpenLedgerModal" class="btn-primary">💵 Record Service Activity</button>
+        </div>
+
+        <div class="kpi-grid">
+          <div class="kpi-card">
+            <span class="kpi-title">Total Cash Received (In)</span>
+            <span class="kpi-value" id="kpiCashIn">$0.00</span>
+          </div>
+          <div class="kpi-card">
+            <span class="kpi-title">Total Cash Paid Out</span>
+            <span class="kpi-value warning" id="kpiCashOut">$0.00</span>
+          </div>
+          <div class="kpi-card">
+            <span class="kpi-title">Customer Fees Collected</span>
+            <span class="kpi-value" id="kpiFees">$0.00</span>
+          </div>
+          <div class="kpi-card">
+            <span class="kpi-title">Store Commission Earned</span>
+            <span class="kpi-value accent" id="kpiCommissions">$0.00</span>
+          </div>
+        </div>
+
+        <div class="table-container">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Date / Time</th>
+                <th>Business</th>
+                <th>Activity</th>
+                <th>Reference</th>
+                <th>Cash In</th>
+                <th>Cash Out</th>
+                <th>Fee</th>
+                <th>Commission</th>
+                <th>Cashier</th>
+              </tr>
+            </thead>
+            <tbody id="ledgerTableBody">
+              <!-- Populated via JS -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ================= TAB 8: SALES & RECEIPTS ================= -->
+      <section id="tab-history" class="view-panel">
+        <div class="panel-header">
+          <div>
+            <h2>Sales Records & Receipt Archive</h2>
+            <p>Review customer receipts, process store-credit returns, and reprint receipts.</p>
+          </div>
+          <div class="search-input-wrapper w-300">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="salesSearch" placeholder="Filter by receipt # or customer...">
+          </div>
+        </div>
+
+        <div class="table-container">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Receipt #</th>
+                <th>Date & Time</th>
+                <th>Category</th>
+                <th>Description</th>
+                <th>Amount</th>
+                <th>Payment</th>
+                <th>Customer</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="salesTableBody">
+              <!-- Populated via JS -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ================= TAB 9: NOTES ================= -->
+      <section id="tab-notes" class="view-panel">
+        <div class="panel-header">
+          <div>
+            <h2>Employee Shift Incident Notes & Handoffs</h2>
+            <p>Log shift handover notes, hardware notifications, and register observations.</p>
+          </div>
+        </div>
+
+        <div class="notes-composer-box">
+          <textarea id="noteInput" placeholder="Enter shift observation, customer note, or handover comment..."></textarea>
+          <div class="composer-actions">
+            <button id="btnSaveNote" class="btn-primary">📝 Post Shift Note</button>
+          </div>
+        </div>
+
+        <div class="notes-timeline" id="notesTimeline">
+          <!-- Populated via JS -->
+        </div>
+      </section>
+
+      <!-- ================= TAB 10: POLICIES & AUDIT ================= -->
+      <section id="tab-policies" class="view-panel">
+        <div class="panel-header">
+          <div>
+            <h2>Store Policies & System Audit Log</h2>
+            <p>Policy snapshots and permanent SQLite transaction audit trails.</p>
+          </div>
+          <div class="printer-settings-box">
+            <label>Printer Output Mode:</label>
+            <select id="printerModeSelect">
+              <option value="Office duplex">Office duplex (Duplex print)</option>
+              <option value="Duplex thermal">Duplex thermal (Front/Back)</option>
+              <option value="Single-sided thermal">Single-sided thermal (Front only)</option>
+            </select>
+            <button id="btnSavePrinterMode" class="btn-secondary-sm">Save Mode</button>
+          </div>
+        </div>
+
+        <div class="policy-accordion" id="policyAccordion">
+          <!-- Store Policies rendered here -->
+        </div>
+
+        <div class="panel-sub-header">
+          <h3>Security & Audit Trail</h3>
+        </div>
+        <div class="table-container max-h-350">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Timestamp</th>
+                <th>User</th>
+                <th>Action</th>
+                <th>Details</th>
+              </tr>
+            </thead>
+            <tbody id="auditTableBody">
+              <!-- Populated via JS -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ================= TAB: PROCUREMENT & PO ================= -->
+      <section id="tab-procurement" class="view-panel">
+        <div class="panel-header">
+          <div>
+            <h2>🏢 Procurement, Vendor Management & Purchase Orders</h2>
+            <p>Draft POs, Multi-tier approval, Atomic Goods Receipt with WAC recalculation, and Supplier AP ledgers.</p>
+          </div>
+          <div style="display:flex; gap:10px; flex-wrap:wrap;">
+            <button id="btnOpenNewPoModal" class="btn-primary">➕ Draft Purchase Order</button>
+            <button id="btnOpenSupplierModal" class="btn-secondary">🏢 Add Supplier</button>
+          </div>
+        </div>
+
+        <div class="kpi-grid">
+          <div class="kpi-card">
+            <span class="kpi-title">Active Suppliers</span>
+            <span class="kpi-value" id="procKpiSuppliers">0</span>
+          </div>
+          <div class="kpi-card">
+            <span class="kpi-title">Pending / Approved POs</span>
+            <span class="kpi-value warning" id="procKpiOpenPos">0</span>
+          </div>
+          <div class="kpi-card">
+            <span class="kpi-title">Completed Goods Receipts</span>
+            <span class="kpi-value accent" id="procKpiCompletedGrns">0</span>
+          </div>
+          <div class="kpi-card">
+            <span class="kpi-title">Outstanding Accounts Payable</span>
+            <span class="kpi-value warning" id="procKpiAccountsPayable">$0.00</span>
+          </div>
+        </div>
+
+        <div class="erp-subnav-bar">
+          <button class="erp-subnav-pill active" data-proc-subview="pos">📋 Purchase Orders Workflow</button>
+          <button class="erp-subnav-pill" data-proc-subview="suppliers">🏢 Vendor Directory & Ledgers</button>
+          <button class="erp-subnav-pill" data-proc-subview="grns">📦 Goods Receipt Notes (GRN Archive)</button>
+        </div>
+
+        <!-- Subview 1: POs Workflow -->
+        <div id="procSubviewPos" class="proc-subview-panel active">
+          <div class="table-container">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>PO Number</th>
+                  <th>Order Date</th>
+                  <th>Supplier</th>
+                  <th>Items Count</th>
+                  <th>Total Cost</th>
+                  <th>Expected Date</th>
+                  <th>Status</th>
+                  <th>Approval / Receiving Actions</th>
+                </tr>
+              </thead>
+              <tbody id="procPoTableBody">
+                <!-- Dynamically populated via JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Subview 2: Suppliers -->
+        <div id="procSubviewSuppliers" class="proc-subview-panel">
+          <div class="table-container">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Code</th>
+                  <th>Supplier Name</th>
+                  <th>Contact Person</th>
+                  <th>Phone / Email</th>
+                  <th>Payment Terms</th>
+                  <th>Ledger AP Balance</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="procSupplierTableBody">
+                <!-- Dynamically populated via JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Subview 3: GRNs -->
+        <div id="procSubviewGrns" class="proc-subview-panel">
+          <div class="table-container">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>GRN Number</th>
+                  <th>PO Reference</th>
+                  <th>Receipt Date</th>
+                  <th>Received By</th>
+                  <th>Total Cost Added</th>
+                  <th>AP Ledger Credited</th>
+                  <th>Inventory Status</th>
+                </tr>
+              </thead>
+              <tbody id="procGrnTableBody">
+                <!-- Dynamically populated via JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= TAB: DOUBLE-ENTRY ACCOUNTING ================= -->
+      <section id="tab-accounting" class="view-panel">
+        <div class="panel-header">
+          <div>
+            <h2>⚖️ Automated Double-Entry Accounting Engine</h2>
+            <p>Zero-manual posting: Automated Journal Entries, Dynamic Trial Balance, General Ledger, and Real-Time P&L.</p>
+          </div>
+          <div style="display:flex; gap:10px;">
+            <button class="btn-secondary-sm" onclick="loadAccountingData()">🔄 Refresh Financials</button>
+          </div>
+        </div>
+
+        <div class="erp-subnav-bar">
+          <button class="erp-subnav-pill active" data-acc-subview="trial_balance">⚖️ Dynamic Trial Balance</button>
+          <button class="erp-subnav-pill" data-acc-subview="pnl">📊 Real-Time Profit &amp; Loss (P&amp;L)</button>
+          <button class="erp-subnav-pill" data-acc-subview="general_ledger">📖 General Ledger (GL)</button>
+          <button class="erp-subnav-pill" data-acc-subview="journal_vouchers">📝 Journal Vouchers (JV)</button>
+        </div>
+
+        <!-- Acc Subview 1: Trial Balance -->
+        <div id="accSubviewTrialBalance" class="acc-subview-panel active">
+          <div id="trialBalanceSummaryCard" class="trial-balance-summary-card" style="margin-bottom:16px;">
+            <!-- Dynamically populated via JS -->
+          </div>
+
+          <div class="table-container">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Account Code</th>
+                  <th>Account Name</th>
+                  <th>Category</th>
+                  <th style="text-align:right;">Debit ($)</th>
+                  <th style="text-align:right;">Credit ($)</th>
+                </tr>
+              </thead>
+              <tbody id="trialBalanceTableBody">
+                <!-- Dynamically populated via JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Acc Subview 2: P&L Statement -->
+        <div id="accSubviewPnl" class="acc-subview-panel">
+          <div id="pnlHeroCard" class="pnl-hero-card" style="margin-bottom:20px;">
+            <!-- Injected via JS -->
+          </div>
+
+          <div class="report-split-grid">
+            <div class="report-card">
+              <h3>📈 Revenues &amp; Other Income</h3>
+              <div class="table-container">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>Account</th>
+                      <th style="text-align:right;">Amount ($)</th>
+                    </tr>
+                  </thead>
+                  <tbody id="pnlRevenueTableBody">
+                    <!-- Populated via JS -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="report-card">
+              <h3>📉 Cost of Goods &amp; Expenses</h3>
+              <div class="table-container">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>Account</th>
+                      <th style="text-align:right;">Amount ($)</th>
+                    </tr>
+                  </thead>
+                  <tbody id="pnlExpenseTableBody">
+                    <!-- Populated via JS -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Acc Subview 3: General Ledger -->
+        <div id="accSubviewGl" class="acc-subview-panel">
+          <div class="shelf-filter-bar" style="margin-bottom:14px;">
+            <span class="filter-label">Filter Ledger Account:</span>
+            <select id="glAccountSelect" style="min-width:260px;">
+              <option value="">-- All General Ledger Accounts --</option>
+            </select>
+          </div>
+
+          <div class="table-container">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Timestamp</th>
+                  <th>Journal Ref</th>
+                  <th>Account</th>
+                  <th>Description</th>
+                  <th style="text-align:right;">Debit ($)</th>
+                  <th style="text-align:right;">Credit ($)</th>
+                </tr>
+              </thead>
+              <tbody id="glTableBody">
+                <!-- Dynamically populated via JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Acc Subview 4: Journal Vouchers -->
+        <div id="accSubviewJv" class="acc-subview-panel">
+          <div class="table-container">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Entry Number</th>
+                  <th>Timestamp</th>
+                  <th>Source Reference</th>
+                  <th>Description</th>
+                  <th>Debit / Credit Lines Breakdown</th>
+                  <th style="text-align:right;">Total Amount</th>
+                </tr>
+              </thead>
+              <tbody id="jvTableBody">
+                <!-- Dynamically populated via JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= TAB: INVENTORY COVERAGE & AUDIT ================= -->
+      <section id="tab-audit_stock" class="view-panel">
+        <div class="panel-header">
+          <div>
+            <h2>📦 Inventory Coverage Runway &amp; Discrepancy Reconciliation</h2>
+            <p>Run-rate coverage days (Stock / 30-day Daily Sales), Reorder safety alerts, and physical count audit shrinkage reconciliation.</p>
+          </div>
+          <div style="display:flex; gap:10px;">
+            <button id="btnOpenStockAuditModal" class="btn-primary">🔍 Start Physical Count Audit</button>
+            <button class="btn-secondary-sm" onclick="loadCoverageAnalytics()">🔄 Recalculate Runway</button>
+          </div>
+        </div>
+
+        <div class="erp-subnav-bar">
+          <button class="erp-subnav-pill active" data-audit-subview="coverage">🏃 Coverage Days &amp; Velocity</button>
+          <button class="erp-subnav-pill" data-audit-subview="audits">🔍 Physical Count Discrepancies</button>
+          <button class="erp-subnav-pill" data-audit-subview="transfers">🔄 Shelf &amp; Warehouse Transfers</button>
+        </div>
+
+        <!-- Subview: Coverage Days -->
+        <div id="auditSubviewCoverage" class="audit-subview-panel active">
+          <div class="alert-box-warning" style="background:rgba(255,106,0,0.08); border-color:rgba(255,106,0,0.3); color:#FF6A00; margin-bottom:14px;">
+            💡 <strong>Runway Coverage Days Formula:</strong> <code>Current Stock Units &divide; (30-Day Sales &divide; 30)</code>. Items with &lt; 7 days runway trigger immediate <strong>CRITICAL REORDER</strong>.
+          </div>
+
+          <div class="table-container">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>SKU / Barcode</th>
+                  <th>Accessory / Part Name</th>
+                  <th>Location Shelf</th>
+                  <th>On-Hand Stock</th>
+                  <th>30-Day Total Sold</th>
+                  <th>Daily Velocity (Units/Day)</th>
+                  <th>Coverage Runway</th>
+                  <th>Reorder Point</th>
+                  <th>Velocity Status</th>
+                </tr>
+              </thead>
+              <tbody id="coverageTableBody">
+                <!-- Populated via JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Subview: Audits -->
+        <div id="auditSubviewAudits" class="audit-subview-panel">
+          <div class="table-container">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Audit #</th>
+                  <th>Date</th>
+                  <th>Product</th>
+                  <th>System Stock</th>
+                  <th>Physical Count</th>
+                  <th>Discrepancy Units</th>
+                  <th>Shrinkage Cost</th>
+                  <th>Investigation Reason</th>
+                  <th>P&amp;L Auto-Post Journal</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="auditReconcileTableBody">
+                <!-- Populated via JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Subview: Transfers -->
+        <div id="auditSubviewTransfers" class="audit-subview-panel">
+          <div class="table-container">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Transfer #</th>
+                  <th>Product</th>
+                  <th>Quantity</th>
+                  <th>Source Location</th>
+                  <th>Destination Shelf</th>
+                  <th>Dispatch Time</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="transfersTableBody">
+                <!-- Populated via JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= TAB: COMBOS & BUNDLES ================= -->
+      <section id="tab-combos" class="view-panel">
+        <div class="panel-header">
+          <div>
+            <h2>🎁 Item Conversion &amp; Promotional Combo Engine</h2>
+            <p>Combine multiple SKUs into promotional bundles. Dynamic defensive pricing enforces selling price &ge; combined COGS.</p>
+          </div>
+          <button id="btnOpenComboModal" class="btn-primary">➕ Create Combo Bundle</button>
+        </div>
+
+        <div class="alert-box-warning" style="background:rgba(0,230,118,0.08); border-color:rgba(0,230,118,0.3); color:#00e676; margin-bottom:14px;">
+          🛡️ <strong>Defensive Cost Architecture:</strong> When a combo is sold at the POS counter, the system automatically checks constituent stock levels and consumes units of each underlying SKU in real time!
+        </div>
+
+        <div class="table-container">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Combo Name</th>
+                <th>Combo Barcode</th>
+                <th>Constituent SKUs Included</th>
+                <th>Combined Cost (COGS)</th>
+                <th>Combo Selling Price</th>
+                <th>Customer Savings</th>
+                <th>Available Combos (Min Constituent Stock)</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="combosTableBody">
+              <!-- Populated via JS -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ================= TAB: OMNICHANNEL STOCK SYNC ================= -->
+      <section id="tab-omnichannel" class="view-panel">
+        <div class="panel-header">
+          <div>
+            <h2>🌐 Omnichannel &amp; E-Commerce Stock Synchronization</h2>
+            <p>Central real-time stock reservation for Web/Phone orders with automated restock for cancelled / returned COD orders.</p>
+          </div>
+          <button id="btnOpenOmniModal" class="btn-primary">➕ Simulate Inbound Web/Phone Order</button>
+        </div>
+
+        <div class="kpi-grid">
+          <div class="kpi-card">
+            <span class="kpi-title">Total Orders</span>
+            <span class="kpi-value" id="omniKpiTotal">0</span>
+          </div>
+          <div class="kpi-card">
+            <span class="kpi-title">Stock Reserved</span>
+            <span class="kpi-value warning" id="omniKpiReserved">0 units</span>
+          </div>
+          <div class="kpi-card">
+            <span class="kpi-title">Dispatched Orders</span>
+            <span class="kpi-value" id="omniKpiDispatched">0</span>
+          </div>
+          <div class="kpi-card">
+            <span class="kpi-title">Restocked COD Returns</span>
+            <span class="kpi-value accent" id="omniKpiRestocked">0</span>
+          </div>
+        </div>
+
+        <div class="table-container">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Order Number</th>
+                <th>Sales Channel</th>
+                <th>Customer Details</th>
+                <th>Product Reserved</th>
+                <th>Units</th>
+                <th>Total Value</th>
+                <th>Status</th>
+                <th>Fulfillment Actions</th>
+              </tr>
+            </thead>
+            <tbody id="omniOrdersTableBody">
+              <!-- Populated via JS -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- Mobile Bottom Navigation Bar -->
+  <nav class="mobile-bottom-nav">
+    <button class="mobile-nav-btn active" data-tab="checkout">
+      <span>🛒</span>
+      <small>Checkout</small>
+    </button>
+    <button class="mobile-nav-btn" data-tab="barcodes">
+      <span>🏷️</span>
+      <small>Barcodes</small>
+    </button>
+    <button class="mobile-nav-btn" data-tab="inventory">
+      <span>📦</span>
+      <small>Stock</small>
+    </button>
+    <button class="mobile-nav-btn" data-tab="reports">
+      <span>📊</span>
+      <small>Reports</small>
+    </button>
+    <button class="mobile-nav-btn" data-tab="customers">
+      <span>👥</span>
+      <small>CRM</small>
+    </button>
+  </nav>
+
+  <!-- ================= MODALS ================= -->
+
+  <!-- Modal: Initial Admin Setup / Login with 1-Click Roles -->
+  <div id="authModal" class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="authModalTitle">Sign In to XPRO STORE POS</h3>
+      </div>
+      <div class="modal-body" id="authModalBody">
+        <!-- Rendered based on whether system is initialized -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Shift Open / Close -->
+  <div id="shiftModal" class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="shiftModalTitle">Register Shift Management</h3>
+        <button class="modal-close" onclick="closeModal('shiftModal')">&times;</button>
+      </div>
+      <div class="modal-body" id="shiftModalBody">
+        <!-- Open or close UI injected dynamically -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Add / Receive Product with Barcode & Placement -->
+  <div id="productModal" class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>Receive / Add Accessory & Stock</h3>
+        <button class="modal-close" onclick="closeModal('productModal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Product / Accessory Name</label>
+          <input type="text" id="inpProdName" placeholder="e.g. iPhone 15 Pro Silicone Magnetic Case" required>
+        </div>
+        <div class="form-row">
+          <div class="form-group flex-1">
+            <label>Category</label>
+            <select id="inpProdCat">
+              <option value="Merchandise">Accessories / Merchandise</option>
+              <option value="Repair">Repair Parts</option>
+              <option value="Prepaid / SIM">Prepaid / SIM</option>
+              <option value="Unlocking">Unlocking</option>
+              <option value="NY LOTTO">NY LOTTO</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div class="form-group flex-1">
+            <label>Store Placement / Shelf</label>
+            <input type="text" id="inpProdShelf" placeholder="e.g. Rack A-1 (Cases Display)" value="Front Display Rack A-1">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group flex-1">
+            <label>Selling Price ($)</label>
+            <input type="number" id="inpProdPrice" placeholder="19.99" step="0.01" required>
+          </div>
+          <div class="form-group flex-1">
+            <label>Cost of Goods ($)</label>
+            <input type="number" id="inpProdCost" placeholder="8.50" step="0.01">
+          </div>
+          <div class="form-group flex-1">
+            <label>Quantity to Add</label>
+            <input type="number" id="inpProdQty" placeholder="10" min="1" value="10" required>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group flex-1">
+            <label>Barcode (Code 128)</label>
+            <div class="input-with-action">
+              <input type="text" id="inpProdBarcode" placeholder="Auto-generated if empty">
+              <button type="button" id="btnGenProdBarcode" class="btn-secondary-sm">✨ Auto Code</button>
+            </div>
+          </div>
+          <div class="form-group flex-1">
+            <label>Internal SKU (Optional)</label>
+            <input type="text" id="inpProdSku" placeholder="ACC-042">
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-ghost" onclick="closeModal('productModal')">Cancel</button>
+        <button id="btnSaveProduct" class="btn-primary">Save Product & Generate Barcode</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Add New Customer (CRM) -->
+  <div id="customerModal" class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>Add Customer to CRM Directory</h3>
+        <button class="modal-close" onclick="closeModal('customerModal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-row">
+          <div class="form-group flex-1">
+            <label>Customer Full Name</label>
+            <input type="text" id="inpCustName" placeholder="Johnathan Smith" required>
+          </div>
+          <div class="form-group flex-1">
+            <label>Phone Number</label>
+            <input type="text" id="inpCustPhone" placeholder="(555) 234-5678" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Email Address (Optional)</label>
+          <input type="email" id="inpCustEmail" placeholder="customer@example.com">
+        </div>
+        <div class="form-group">
+          <label>Customer Preferences / Store Notes</label>
+          <input type="text" id="inpCustNotes" placeholder="Prefers MagSafe cases; iPhone 15 user">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-ghost" onclick="closeModal('customerModal')">Cancel</button>
+        <button id="btnSaveCustomer" class="btn-primary">Save Customer</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: New Repair Ticket -->
+  <div id="repairModal" class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>Create Device Repair Ticket</h3>
+        <button class="modal-close" onclick="closeModal('repairModal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-row">
+          <div class="form-group flex-1">
+            <label>Customer Name</label>
+            <input type="text" id="inpRepCust" placeholder="Full Name" required>
+          </div>
+          <div class="form-group flex-1">
+            <label>Contact Phone</label>
+            <input type="text" id="inpRepPhone" placeholder="(555) 000-0000" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Device Model & Color</label>
+          <input type="text" id="inpRepDevice" placeholder="e.g. iPhone 14 Pro Space Black" required>
+        </div>
+        <div class="form-group">
+          <label>Reported Issue & Service Needed</label>
+          <textarea id="inpRepIssue" placeholder="e.g. Cracked screen, front glass shattered, touch working..."></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-ghost" onclick="closeModal('repairModal')">Cancel</button>
+        <button id="btnSaveRepair" class="btn-primary">Issue Repair Ticket</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Notify & Mark Repair Ready -->
+  <div id="repairReadyModal" class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>Mark Device Ready & Record Notification</h3>
+        <button class="modal-close" onclick="closeModal('repairReadyModal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p id="repairReadyPrompt">Customer notification record is required by store policy:</p>
+        <div class="form-group">
+          <label>How was the customer notified?</label>
+          <select id="inpReadyMethod">
+            <option value="Phone call (spoken with customer)">Phone call (spoken with customer)</option>
+            <option value="SMS text message sent">SMS text message sent</option>
+            <option value="Voicemail message left">Voicemail message left</option>
+            <option value="In-person customer notification">In-person customer notification</option>
+          </select>
+        </div>
+        <div class="alert-box-warning">
+          ℹ️ Store policy requires customer pickup within 10 calendar days. The countdown starts immediately.
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-ghost" onclick="closeModal('repairReadyModal')">Cancel</button>
+        <button id="btnConfirmRepairReady" class="btn-primary">Confirm & Mark Ready</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Record Service Ledger (Money Transfer / LOTTO) -->
+  <div id="ledgerModal" class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>Record Money Transfer / NY LOTTO Activity</h3>
+        <button class="modal-close" onclick="closeModal('ledgerModal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-row">
+          <div class="form-group flex-1">
+            <label>Business</label>
+            <select id="inpLedgerBusiness">
+              <option value="Money Transfer">Money Transfer</option>
+              <option value="NY LOTTO">NY LOTTO</option>
+            </select>
+          </div>
+          <div class="form-group flex-1">
+            <label>Activity Type</label>
+            <select id="inpLedgerKind">
+              <option value="Customer transaction">Customer transaction</option>
+              <option value="Settlement">Settlement</option>
+              <option value="Adjustment">Adjustment</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group flex-1">
+            <label>Provider Reference #</label>
+            <input type="text" id="inpLedgerRef" placeholder="MT-98124 / LOT-041">
+          </div>
+          <div class="form-group flex-1">
+            <label>Description</label>
+            <input type="text" id="inpLedgerDesc" placeholder="Western Union Send / Quick Pick">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group flex-1">
+            <label>Cash Received (In) ($)</label>
+            <input type="number" id="inpLedgerIn" placeholder="0.00" step="0.01" value="0.00">
+          </div>
+          <div class="form-group flex-1">
+            <label>Cash Paid Out ($)</label>
+            <input type="number" id="inpLedgerOut" placeholder="0.00" step="0.01" value="0.00">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group flex-1">
+            <label>Customer Fee ($)</label>
+            <input type="number" id="inpLedgerFee" placeholder="0.00" step="0.01" value="0.00">
+          </div>
+          <div class="form-group flex-1">
+            <label>Store Commission ($)</label>
+            <input type="number" id="inpLedgerComm" placeholder="0.00" step="0.01" value="0.00">
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-ghost" onclick="closeModal('ledgerModal')">Cancel</button>
+        <button id="btnSaveLedger" class="btn-primary">Record Activity</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Return Item / Store Credit -->
+  <div id="returnModal" class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>Process Return (Store Credit Only)</h3>
+        <button class="modal-close" onclick="closeModal('returnModal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div id="returnSaleSummary" class="return-summary-box">
+          <!-- Sale summary injected -->
+        </div>
+        <div class="form-group checkbox-group">
+          <label>
+            <input type="checkbox" id="chkReturnOpened">
+            <strong>Package has been opened</strong> (Requires Admin Approval)
+          </label>
+        </div>
+        <div class="form-group">
+          <label>Return Reason / Staff Note</label>
+          <input type="text" id="inpReturnNote" value="Store credit issued; discretionary return">
+        </div>
+        <div class="alert-box-warning">
+          ⚠️ <strong>Store Policy:</strong> Discretionary returns receive Store Credit only. No cash refunds. Opened packaging or items past 5 days require administrator review.
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-ghost" onclick="closeModal('returnModal')">Cancel</button>
+        <button id="btnConfirmReturn" class="btn-danger">Issue Store Credit</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Receipt Preview & Printing -->
+  <div id="receiptModal" class="modal-overlay">
+    <div class="modal-card modal-receipt">
+      <div class="modal-header">
+        <h3>🧾 Receipt & Policy Slip Preview</h3>
+        <button class="modal-close" onclick="closeModal('receiptModal')">&times;</button>
+      </div>
+      <div class="modal-body receipt-modal-body">
+        <div class="receipt-paper" id="receiptPaperContainer">
+          <!-- Receipt HTML will be placed here -->
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-ghost" onclick="closeModal('receiptModal')">Done</button>
+        <button id="btnPrintReceiptBtn" class="btn-primary">🖨️ Print Receipt (Browser Dialog)</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Split Tender Payment (Cash, Card, MFS, Loyalty) -->
+  <div id="splitModal" class="modal-overlay">
+    <div class="modal-card modal-lg">
+      <div class="modal-header">
+        <h3>💳 Multi-Tender Split Payment Checkout</h3>
+        <button class="modal-close" onclick="closeModal('splitModal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="split-summary-box" style="display:flex; justify-content:space-between; align-items:center; padding:14px 20px; background:rgba(255,106,0,0.08); border-radius:10px; border:1px solid rgba(255,106,0,0.25); margin-bottom:18px;">
+          <div>
+            <div style="font-size:0.85rem; color:var(--text-secondary);">Total Bill Due:</div>
+            <div id="splitTotalBill" style="font-size:1.8rem; font-weight:900; color:#fff;">$0.00</div>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-size:0.85rem; color:var(--text-secondary);">Remaining to Tender:</div>
+            <div id="splitRemainingDue" style="font-size:1.8rem; font-weight:900; color:var(--accent);">$0.00</div>
+          </div>
+        </div>
+
+        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap:14px; margin-bottom:16px;">
+          <div class="form-group" style="background:rgba(255,255,255,0.02); padding:12px; border-radius:8px; border:1px solid var(--border-color);">
+            <label style="color:#00e676; font-weight:700;">💵 Cash Tender ($)</label>
+            <input type="number" id="splitCashInput" step="0.01" min="0" placeholder="0.00" value="0.00" oninput="updateSplitMath()">
+            <div style="font-size:0.75rem; color:var(--text-secondary); margin-top:4px;">Physical currency in drawer</div>
+          </div>
+
+          <div class="form-group" style="background:rgba(255,255,255,0.02); padding:12px; border-radius:8px; border:1px solid var(--border-color);">
+            <label style="color:#29b6f6; font-weight:700;">💳 Credit / Debit Card ($)</label>
+            <input type="number" id="splitCardInput" step="0.01" min="0" placeholder="0.00" value="0.00" oninput="updateSplitMath()">
+            <div style="font-size:0.75rem; color:var(--text-secondary); margin-top:4px;">Stripe / POS Card Terminal</div>
+          </div>
+
+          <div class="form-group" style="background:rgba(255,255,255,0.02); padding:12px; border-radius:8px; border:1px solid var(--border-color);">
+            <label style="color:#e91e63; font-weight:700;">📱 MFS (bKash / Nagad) ($)</label>
+            <input type="number" id="splitMfsInput" step="0.01" min="0" placeholder="0.00" value="0.00" oninput="updateSplitMath()">
+            <div style="font-size:0.75rem; color:var(--text-secondary); margin-top:4px;">Mobile Wallet QR / TrxID</div>
+          </div>
+        </div>
+
+        <!-- Cash tendered & change calculation -->
+        <div style="display:flex; justify-content:space-between; align-items:center; padding:12px 16px; background:rgba(255,255,255,0.03); border-radius:8px; border:1px solid var(--border-color); margin-bottom:14px;">
+          <div>
+            <label style="font-size:0.85rem; color:var(--text-secondary);">Exact Cash Handed by Customer ($):</label>
+            <input type="number" id="splitCashHanded" step="0.01" min="0" placeholder="Exact or higher" style="max-width:180px; margin-top:4px;" oninput="updateSplitMath()">
+          </div>
+          <div style="text-align:right;">
+            <div style="font-size:0.85rem; color:var(--text-secondary);">Change Due Back to Customer:</div>
+            <div id="splitChangeDue" style="font-size:1.5rem; font-weight:800; color:#00e676;">$0.00</div>
+          </div>
+        </div>
+
+        <div id="splitValidationAlert" class="alert-box-warning" style="display:none; margin-bottom:10px;"></div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-ghost" onclick="closeModal('splitModal')">Cancel</button>
+        <button id="btnFinalizeSplitSale" class="btn-primary" onclick="submitSplitCheckout()">✅ Complete Split Sale &amp; Print</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Keyboard Shortcuts Cheat Sheet -->
+  <div id="hotkeysModal" class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>⌨️ Keyboard-First Fast POS Hotkeys</h3>
+        <button class="modal-close" onclick="closeModal('hotkeysModal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p style="font-size:0.85rem; color:var(--text-secondary); margin-bottom:14px;">Use mouse-free keyboard commands to operate the checkout counter at lightning speed:</p>
+        <div class="hotkeys-grid">
+          <div class="hotkey-item"><kbd>F1</kbd><span>Open This Hotkeys Reference</span></div>
+          <div class="hotkey-item"><kbd>F2</kbd><span>Focus Barcode Scanner / SKU Search</span></div>
+          <div class="hotkey-item"><kbd>F3</kbd><span>Hold Current Cart (Multi-Cart Swap)</span></div>
+          <div class="hotkey-item"><kbd>F4</kbd><span>Switch Between Held Carts</span></div>
+          <div class="hotkey-item"><kbd>F8</kbd><span>Open Split Tender Payment Modal</span></div>
+          <div class="hotkey-item"><kbd>F9</kbd><span>Instant 1-Click Cash Checkout</span></div>
+          <div class="hotkey-item"><kbd>F10</kbd><span>Register Shift Float / Reconciliation</span></div>
+          <div class="hotkey-item"><kbd>Esc</kbd><span>Close Open Modal or Clear Search</span></div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-primary" onclick="closeModal('hotkeysModal')">Got it! [Esc]</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Draft Purchase Order -->
+  <div id="poModal" class="modal-overlay">
+    <div class="modal-card modal-lg">
+      <div class="modal-header">
+        <h3>📋 Draft Purchase Order (Vendor PO)</h3>
+        <button class="modal-close" onclick="closeModal('poModal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-row">
+          <div class="form-group flex-1">
+            <label>Vendor / Supplier</label>
+            <select id="poSupplierSelect" required>
+              <option value="">-- Choose Supplier --</option>
+            </select>
+          </div>
+          <div class="form-group flex-1">
+            <label>Expected Delivery Date</label>
+            <input type="date" id="poExpectedDate">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>PO Notes / Shipment Instructions</label>
+          <input type="text" id="poNotes" placeholder="e.g. Bulk restock for flagship cases, net 30 payment">
+        </div>
+
+        <div style="display:flex; justify-content:space-between; align-items:center; margin:16px 0 8px 0;">
+          <h4 style="color:#fff; margin:0;">Line Items to Order</h4>
+          <button type="button" class="btn-secondary-sm" onclick="addPoLineItemRow()">➕ Add Line Item</button>
+        </div>
+
+        <div class="table-container max-h-250">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Accessory / Product SKU</th>
+                <th style="width:120px;">Unit Cost ($)</th>
+                <th style="width:100px;">Quantity</th>
+                <th style="width:120px; text-align:right;">Subtotal</th>
+                <th style="width:50px;"></th>
+              </tr>
+            </thead>
+            <tbody id="poLineItemsBody">
+              <!-- Dynamically populated rows -->
+            </tbody>
+          </table>
+        </div>
+
+        <div style="text-align:right; margin-top:14px; font-size:1.15rem; font-weight:800; color:var(--accent);">
+          Total Order Cost: <span id="poTotalAmountDisplay">$0.00</span>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-ghost" onclick="closeModal('poModal')">Cancel</button>
+        <button id="btnSavePo" class="btn-primary" onclick="submitDraftPo()">Save Draft PO</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Add Supplier -->
+  <div id="supplierModal" class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>🏢 Register New Supplier Profile</h3>
+        <button class="modal-close" onclick="closeModal('supplierModal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-row">
+          <div class="form-group flex-1">
+            <label>Supplier Company Name</label>
+            <input type="text" id="supName" placeholder="e.g. Apex Global Accessories Ltd." required>
+          </div>
+          <div class="form-group flex-1">
+            <label>Supplier Code</label>
+            <input type="text" id="supCode" placeholder="SUP-APEX">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group flex-1">
+            <label>Contact Person</label>
+            <input type="text" id="supContact" placeholder="Robert Vance">
+          </div>
+          <div class="form-group flex-1">
+            <label>Phone Number</label>
+            <input type="text" id="supPhone" placeholder="(555) 789-0123">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group flex-1">
+            <label>Email Address</label>
+            <input type="email" id="supEmail" placeholder="orders@apexparts.com">
+          </div>
+          <div class="form-group flex-1">
+            <label>Payment Terms</label>
+            <select id="supTerms">
+              <option value="NET_30">Net 30 Days</option>
+              <option value="NET_15">Net 15 Days</option>
+              <option value="COD">Cash on Delivery (COD)</option>
+              <option value="ADVANCE">100% Advance Payment</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-ghost" onclick="closeModal('supplierModal')">Cancel</button>
+        <button id="btnSaveSupplier" class="btn-primary" onclick="submitNewSupplier()">Save Supplier Profile</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Stock Audit Physical Count -->
+  <div id="stockAuditModal" class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>🔍 Physical Stock Count &amp; Shrinkage Audit</h3>
+        <button class="modal-close" onclick="closeModal('stockAuditModal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Select Product to Audit</label>
+          <select id="auditProdSelect" onchange="updateAuditProductPreview()" required>
+            <option value="">-- Choose Inventory Item --</option>
+          </select>
+        </div>
+
+        <div style="display:flex; justify-content:space-between; padding:12px; background:rgba(255,255,255,0.03); border-radius:8px; margin-bottom:14px; border:1px solid var(--border-color);">
+          <div>
+            <div style="font-size:0.8rem; color:var(--text-secondary);">System Recorded Stock:</div>
+            <div id="auditSystemStockDisplay" style="font-size:1.2rem; font-weight:800; color:#fff;">-- units</div>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-size:0.8rem; color:var(--text-secondary);">Item Unit Cost:</div>
+            <div id="auditUnitCostDisplay" style="font-size:1.2rem; font-weight:800; color:var(--accent);">$0.00</div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group flex-1">
+            <label>Physical Count (Units Actually Found)</label>
+            <input type="number" id="auditPhysicalCount" placeholder="e.g. 18" min="0" oninput="updateAuditDiscrepancyMath()" required>
+          </div>
+          <div class="form-group flex-1">
+            <label>Investigation Reason</label>
+            <select id="auditReasonSelect">
+              <option value="Theft / Pilferage">Theft / Pilferage (Shrinkage)</option>
+              <option value="Damage / Breakage">Damage / Breakage in Store</option>
+              <option value="Unrecorded Retail Sale">Unrecorded Retail Sale</option>
+              <option value="Supplier Data Entry Error">Supplier Data Entry Error</option>
+              <option value="Customer Return Not Logged">Customer Return Not Logged</option>
+            </select>
+          </div>
+        </div>
+
+        <div id="auditDiscrepancyCard" style="display:none; padding:12px; border-radius:8px; margin-bottom:14px;"></div>
+
+        <div class="form-group">
+          <label>Manager Audit Notes</label>
+          <input type="text" id="auditNotes" placeholder="Audit conducted during night count closing...">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-ghost" onclick="closeModal('stockAuditModal')">Cancel</button>
+        <button id="btnSaveStockAudit" class="btn-primary" onclick="submitStockAudit()">Reconcile &amp; Auto-Post to P&amp;L</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Create Combo / Bundle -->
+  <div id="comboModal" class="modal-overlay">
+    <div class="modal-card modal-lg">
+      <div class="modal-header">
+        <h3>🎁 Create Promotional Combo / Bundle</h3>
+        <button class="modal-close" onclick="closeModal('comboModal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-row">
+          <div class="form-group flex-1">
+            <label>Bundle Name</label>
+            <input type="text" id="comboName" placeholder="e.g. iPhone 15 Pro Guard Bundle (Case + Glass)" required>
+          </div>
+          <div class="form-group flex-1">
+            <label>Combo Barcode (Code 128)</label>
+            <div class="input-with-action">
+              <input type="text" id="comboBarcode" placeholder="Auto-generated if empty">
+              <button type="button" class="btn-secondary-sm" onclick="genComboBarcode()">✨ Auto</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group flex-1">
+            <label>Promotional Selling Price ($)</label>
+            <input type="number" id="comboPrice" step="0.01" min="0" placeholder="29.99" oninput="updateComboDefensiveCheck()" required>
+          </div>
+          <div class="form-group flex-1">
+            <label>Store Shelf / Placement</label>
+            <input type="text" id="comboShelf" value="Front Promotional Table">
+          </div>
+        </div>
+
+        <div style="display:flex; justify-content:space-between; align-items:center; margin:16px 0 8px 0;">
+          <h4 style="color:#fff; margin:0;">Constituent Items to Combine</h4>
+          <button type="button" class="btn-secondary-sm" onclick="addComboItemRow()">➕ Add SKU</button>
+        </div>
+
+        <div class="table-container max-h-200">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Accessory / SKU</th>
+                <th style="width:90px;">Qty Consumed</th>
+                <th style="width:110px;">Unit Cost</th>
+                <th style="width:110px; text-align:right;">Subtotal Cost</th>
+                <th style="width:40px;"></th>
+              </tr>
+            </thead>
+            <tbody id="comboItemsTableBody">
+              <!-- Dynamically populated rows -->
+            </tbody>
+          </table>
+        </div>
+
+        <div id="comboDefensiveBanner" style="margin-top:14px; padding:12px; border-radius:8px; border:1px solid var(--border-color); background:rgba(255,255,255,0.02);">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <span>Combined Base Cost (COGS): <strong id="comboTotalCogsDisplay">$0.00</strong></span>
+            <span>Combo Margin: <strong id="comboMarginDisplay" style="color:#00e676;">0.0%</strong></span>
+          </div>
+          <div id="comboDefensiveAlert" style="margin-top:6px; font-size:0.82rem; color:#ff5252; display:none;">
+            ⚠️ <strong>Defensive Pricing Error:</strong> Selling price cannot be lower than the combined COGS of the constituent items!
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-ghost" onclick="closeModal('comboModal')">Cancel</button>
+        <button id="btnSaveCombo" class="btn-primary" onclick="submitComboBundle()">Save &amp; Activate Combo</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Simulate Inbound Omnichannel Order -->
+  <div id="omniOrderModal" class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>🌐 Simulate Inbound Web / Phone Order</h3>
+        <button class="modal-close" onclick="closeModal('omniOrderModal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-row">
+          <div class="form-group flex-1">
+            <label>Sales Channel</label>
+            <select id="omniChannel">
+              <option value="Web Store">Official Web Store</option>
+              <option value="Shopify">Shopify E-Commerce</option>
+              <option value="Phone Order">Phone Inbound Order</option>
+              <option value="WhatsApp">WhatsApp Quick Order</option>
+            </select>
+          </div>
+          <div class="form-group flex-1">
+            <label>Customer Name</label>
+            <input type="text" id="omniCustomer" placeholder="Farhan Ahmed" required>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group flex-1">
+            <label>Product to Reserve</label>
+            <select id="omniProdSelect" required>
+              <option value="">-- Choose Item --</option>
+            </select>
+          </div>
+          <div class="form-group flex-1">
+            <label>Units Quantity</label>
+            <input type="number" id="omniQty" value="1" min="1" required>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-ghost" onclick="closeModal('omniOrderModal')">Cancel</button>
+        <button id="btnSaveOmniOrder" class="btn-primary" onclick="submitOmniOrder()">Reserve Inventory &amp; Sync</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Hidden Container for Printing Barcode Labels Directly -->
+  <div id="barcodePrintSection" class="print-only-container"></div>
+
+  <!-- Toast Notification Container -->
+  <div id="toastContainer" class="toast-container"></div>
+
+  <script src="/app.js"></script>
+</body>
+</html>
